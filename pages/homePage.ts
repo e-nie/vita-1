@@ -48,6 +48,19 @@ export class HomePage {
     async verifySearchResults(query: string) {
         await expect(this.searchCaption).toContainText(query);
         await expect(this.searchResults).toContainText(query);
+        
+        // Get all product names from the search results
+        const foundProductNames = await this.productName.allTextContents();
+        
+        // Verify at least one product was found
+        expect(foundProductNames.length).toBeGreaterThan(0);
+        
+        // Verify each found product contains the search query (case insensitive)
+        const queryLower = query.toLowerCase();
+        const matchingProducts = foundProductNames.filter(name => 
+            name.toLowerCase().includes(queryLower)
+        );
+        expect(matchingProducts.length).toBeGreaterThan(0);
     }
 
     async resetSearch() {
