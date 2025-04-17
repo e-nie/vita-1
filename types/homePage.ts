@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 
 export interface HomePageType {
-    page: Page;
+     page: Page;
     URL: string;
 
     // Search
