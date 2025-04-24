@@ -1,9 +1,9 @@
 export const registerUser = async (request, payload) => {
-  return request.post('https://api.practicesoftwaretesting.com/users/register', {
+  return request.post('https://api-v1.practicesoftwaretesting.com/products', {
     data: payload,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   });
-}; //https://api-v1.practicesoftwaretesting.com/products
+};

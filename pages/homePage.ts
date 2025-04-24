@@ -1,13 +1,13 @@
-import { test, Locator, Page, expect } from "@playwright/test";
+import { Locator, Page, expect } from '@playwright/test';
 
 export class HomePage {
-  private URL = "/";
+  private URL = '/';
 
   // Sorting constants
-  private readonly SORT_NAME_ASC = "name,asc";
-  private readonly SORT_NAME_DESC = "name,desc";
-  private readonly SORT_PRICE_DESC = "price,desc";
-  private readonly SORT_PRICE_ASC = "price,asc";
+  private readonly SORT_NAME_ASC = 'name,asc';
+  private readonly SORT_NAME_DESC = 'name,desc';
+  private readonly SORT_PRICE_DESC = 'price,desc';
+  private readonly SORT_PRICE_ASC = 'price,asc';
 
   private productName: Locator;
   //SEARCH
@@ -21,14 +21,14 @@ export class HomePage {
   private sortField: Locator;
 
   constructor(private page: Page) {
-    this.productName = this.page.locator("data-test=product-name");
-    this.searchField = page.locator("data-test=search-query");
-    this.searchSubmit = page.locator("data-test=search-submit");
-    this.searchReset = page.locator("data-test=search-reset");
-    this.searchCaption = page.locator("data-test=search-term");
-    this.searchResults = page.locator("data-test=search_completed");
+    this.productName = this.page.locator('data-test=product-name');
+    this.searchField = page.locator('data-test=search-query');
+    this.searchSubmit = page.locator('data-test=search-submit');
+    this.searchReset = page.locator('data-test=search-reset');
+    this.searchCaption = page.locator('data-test=search-term');
+    this.searchResults = page.locator('data-test=search_completed');
 
-    this.sortField = page.locator("data-test=sort");
+    this.sortField = page.locator('data-test=sort');
   }
 
   async openViaUrl() {
@@ -58,15 +58,15 @@ export class HomePage {
     // Verify each found product contains the search query (case insensitive)
     const queryLower = query.toLowerCase();
     const matchingProducts = foundProductNames.filter((name) =>
-      name.toLowerCase().includes(queryLower)
+      name.toLowerCase().includes(queryLower),
     );
     expect(matchingProducts.length).toBeGreaterThan(0);
   }
 
   async resetSearch() {
     await this.searchReset.click();
-    await expect(this.searchField).toHaveValue("");
-  }  
+    await expect(this.searchField).toHaveValue('');
+  }
 
   //sort methods
 }
