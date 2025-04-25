@@ -1,5 +1,7 @@
 import { Locator, Page, expect } from '@playwright/test';
 
+export type SortType = 'name,asc' | 'name,desc' | 'price,desc' | 'price,asc';
+
 export class HomePage {
   private URL = '/';
 
@@ -66,6 +68,19 @@ export class HomePage {
   async resetSearch() {
     await this.searchReset.click();
     await expect(this.searchField).toHaveValue('');
+  }
+
+  async sortBy(sortType: SortType) {
+    await this.sortField.selectOption(sortType);
+  }
+
+  async verifyProductsDisplayed() {
+    await expect(this.productName.first()).toBeVisible();
+  }
+
+  async getProductNames() {
+    const productNames = await this.productName.allTextContents();
+    return productNames.map((name) => name.trim());
   }
 
   //sort methods
