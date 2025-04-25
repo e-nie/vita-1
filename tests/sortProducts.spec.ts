@@ -1,5 +1,7 @@
 import { expect, test } from '../baseTest';
 
+const areEqualShallow = (a, b) => a.length === b.length && a.every((val, i) => val === b[i]);
+
 test.describe('Sort products functionality - POSITIVE', () => {
   test.beforeEach(async ({ homePage }) => {
     await homePage.openViaUrl();
@@ -9,12 +11,26 @@ test.describe('Sort products functionality - POSITIVE', () => {
   test('should sort products by name in ascending order', async ({ homePage }) => {
     await homePage.sortBy('name,asc');
 
-    await homePage.verifyProductsDisplayed();
+    await expect
+      .poll(async () => {
+        const productsOnThePage = await homePage.getProductNames();
+        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c']
+        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+      })
+      .toEqual(true);
+  });
 
-    const productsOnThePage = await homePage.getProductNames();
+  test('should sort products by name in desc order', async ({ homePage }) => {
+    await homePage.sortBy('name,desc');
 
-    const sortedProductsOnThePage = productsOnThePage.sort();
-
-    expect(productsOnThePage).toEqual(sortedProductsOnThePage);
+    await expect
+      .poll(async () => {
+        const productsOnThePage = await homePage.getProductNames();
+        const sortedProductsOnThePage = [...productsOnThePage].sort((a: string, b: string) =>
+          b.localeCompare(a),
+        ); // ['a', 'b', 'c']
+        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+      })
+      .toEqual(true);
   });
 });
