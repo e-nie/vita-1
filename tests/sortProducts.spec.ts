@@ -1,47 +1,36 @@
 import { expect, test } from '../baseTest';
-import { products } from '../data/products';
 
-test.describe.only('Sort products functionality - POSITIVE', () => {
+const areEqualShallow = (a, b) => a.length === b.length && a.every((val, i) => val === b[i]);
+
+test.describe('Sort products functionality - POSITIVE', () => {
   test.beforeEach(async ({ homePage }) => {
     await homePage.openViaUrl();
     await homePage.verifyPageLoaded();
   });
 
-  test('should sort products by name in ascending order', async ({ page }) => {
-    //get all products names from test data
-    const productsData = products.map((product) => product.name);
+  test('should sort products by name in ascending order', async ({ homePage }) => {
+    await homePage.sortBy('name,asc');
 
-    //slice the first 9 products to match the page data
-    const subsetProductsData = productsData.slice(0, 9);
-    //sort the products data in AZ to compare with the page sorted data
-    const sortedSubsetProductsData = subsetProductsData.sort();
-
-    // Select the sort option from dropdown  in AZ
-    await page.locator('[data-test="sort"]').selectOption('name,asc');
-
-    //use expect.poll to wait for the page to load
     await expect
       .poll(async () => {
-        const productNamesFromPage = await page
-          .locator('[data-test="product-name"]')
-          .allTextContents();
-        return productNamesFromPage.length;
+        const productsOnThePage = await homePage.getProductNames();
+        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c']
+        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
       })
-      .toBeGreaterThan(0);
+      .toEqual(true);
+  });
 
-    // Get the actual product names from the page
-    const productNamesFromPage = await page.locator('[data-test="product-name"]').allTextContents();
+  test('should sort products by name in desc order', async ({ homePage }) => {
+    await homePage.sortBy('name,desc');
 
-    // Trim whitespace from the product names
-    const trimmedProductNamesFromPage = productNamesFromPage.map((name) => name.trim());
-
-    // Log the results for debugging
-    console.log('Products from page:', productNamesFromPage);
-    console.log('Expected sorted products:', sortedSubsetProductsData);
-
-    // Sort trimmed names for final comparison
-    const sortedTrimmedNamesFromPage = trimmedProductNamesFromPage.sort();
-
-    expect(sortedTrimmedNamesFromPage).toEqual(sortedSubsetProductsData);
+    await expect
+      .poll(async () => {
+        const productsOnThePage = await homePage.getProductNames();
+        const sortedProductsOnThePage = [...productsOnThePage].sort((a: string, b: string) =>
+          b.localeCompare(a),
+        ); // ['a', 'b', 'c']
+        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+      })
+      .toEqual(true);
   });
 });
