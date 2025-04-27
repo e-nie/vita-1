@@ -4,12 +4,12 @@ import { storeProduct } from '../../api/productsApi';
 //todo 
 test('verify product stored successfully', async ({ request }) => {
   const payload = {
-    "name": "VeryNEw Product",
+    "name": "YO Product",
     "description": "test",
     "price": 1.99,
-    "category_id": "01JSWGT172Q8AAFDWX4WN11VRM",
-    "brand_id": "01JSWGT15NA87EH2KSN0JYSB3E",
-    "product_image_id": "01JSWGT17GPGHC4BEQ9JSJ9ER0",
+    "category_id": "01JSWM7ZV98V99WA3X5KTKJXED",
+    "brand_id": "01JSWM7ZSS1H9EG3W74Q1X2ZEH",
+    "product_image_id": "01JSWM7ZW2R89XDDW1S93TEZ37",
     "is_location_offer": true,
     "is_rental": false
   }

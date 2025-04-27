@@ -2,22 +2,21 @@ import { test, expect } from '@playwright/test';
 import { storeProduct, getProductById } from '../../api/productsApi';
 
 test('get product by id', async ({ request }) => {
-  //create new product
 
+  //create new product
   const payload = {
-    "name": "VeryNEw Product",
+    "name": "YO Product",
     "description": "test",
     "price": 1.99,
-    "category_id": "01JSWGT172Q8AAFDWX4WN11VRM",
-    "brand_id": "01JSWGT15NA87EH2KSN0JYSB3E",
-    "product_image_id": "01JSWGT17GPGHC4BEQ9JSJ9ER0",
+    "category_id": "01JSWM7ZV98V99WA3X5KTKJXED",
+    "brand_id": "01JSWM7ZSS1H9EG3W74Q1X2ZEH",
+    "product_image_id": "01JSWM7ZW2R89XDDW1S93TEZ37",
     "is_location_offer": true,
     "is_rental": false
   }
 
-  //create new product
-  const responseNewProduct = await storeProduct(request, payload);
-  expect(responseNewProduct.ok()).toBeTruthy();
+   const responseNewProduct = await storeProduct(request, payload);
+
   
   // get newProductResponseBody
   const responseNewProductBody = await responseNewProduct.json();
@@ -27,6 +26,8 @@ test('get product by id', async ({ request }) => {
 //get product by id
   const response = await getProductById(request, productId);
   console.log(response);
+
+  expect(response.ok()).toBeTruthy();
 
   const responseBody = await response.json();
   const validationData = {
