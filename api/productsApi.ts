@@ -8,8 +8,8 @@ export const storeProduct = async (request, payload) => {
   });
 };
 
-export const getProductById = async (request) => {
-  return request.get('https://api.practicesoftwaretesting.com/products/01jsw9b72rwcs28474ha1ca78b', {
+export const getProductById = async (request, id) => {
+  return request.get(`https://api.practicesoftwaretesting.com/products/${id}`, {
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',

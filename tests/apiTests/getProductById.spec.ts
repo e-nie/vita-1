@@ -1,12 +1,32 @@
 import { test, expect } from '@playwright/test';
-import { getProductById } from '../../api/productsApi';
+import { storeProduct, getProductById } from '../../api/productsApi';
 
 test('get product by id', async ({ request }) => {
-  // const id = '01jsw9b72rwcs28474ha1ca78b';
-  const response = await getProductById(request);
-  console.log(response);
+  //create new product
 
-  expect(response.ok()).toBeTruthy();
+  const payload = {
+    "name": "VeryNEw Product",
+    "description": "test",
+    "price": 1.99,
+    "category_id": "01JSWGT172Q8AAFDWX4WN11VRM",
+    "brand_id": "01JSWGT15NA87EH2KSN0JYSB3E",
+    "product_image_id": "01JSWGT17GPGHC4BEQ9JSJ9ER0",
+    "is_location_offer": true,
+    "is_rental": false
+  }
+
+  //create new product
+  const responseNewProduct = await storeProduct(request, payload);
+  expect(responseNewProduct.ok()).toBeTruthy();
+  
+  // get newProductResponseBody
+  const responseNewProductBody = await responseNewProduct.json();
+  const productId = responseNewProductBody.id;
+  console.log('New Product ID:', productId);
+  
+//get product by id
+  const response = await getProductById(request, productId);
+  console.log(response);
 
   const responseBody = await response.json();
   const validationData = {
@@ -36,6 +56,6 @@ test('get product by id', async ({ request }) => {
     },
   };
 
-  console.log('Response Body:', responseBody);
-  expect(validationData.id).toEqual('01jsw9b72rwcs28474ha1ca78b');
+
+  expect(validationData.id).toEqual(productId);
 });
