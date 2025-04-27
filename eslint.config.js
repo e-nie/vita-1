@@ -17,7 +17,7 @@ export default [
       'no-console': 'warn',
       'prefer-const': 'error',
       quotes: ['error', 'single'],
-      semi: ['error', 'always'],
+      semi: ['error', 'none'],
       'no-duplicate-imports': 'error',
     },
   },

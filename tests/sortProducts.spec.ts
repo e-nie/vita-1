@@ -25,12 +25,26 @@ test.describe('Sort products functionality - POSITIVE', () => {
 
     await expect
       .poll(async () => {
-        const productsOnThePage = await homePage.getProductNames();
-        const sortedProductsOnThePage = [...productsOnThePage].sort((a: string, b: string) =>
-          b.localeCompare(a),
-        ); // ['a', 'b', 'c']
-        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+        const productNamesFromPage = await page
+          .locator('[data-test="product-name"]')
+          .allTextContents();
+        return productNamesFromPage.length;
       })
-      .toEqual(true);
+      .toBeGreaterThan(0);
+
+    // Get the actual product names from the page
+    const productNamesFromPage = await page.locator('[data-test="product-name"]').allTextContents();
+
+    // Trim whitespace from the product names
+    const trimmedProductNamesFromPage = productNamesFromPage.map((name) => name.trim());
+
+    // Log the results for debugging
+    console.log('Products from page:', productNamesFromPage);
+    console.log('Expected sorted products:', sortedSubsetProductsData);
+
+    // Sort trimmed names for final comparison
+    // const sortedTrimmedNamesFromPage = trimmedProductNamesFromPage.sort();
+
+    expect(trimmedProductNamesFromPage).toEqual(sortedSubsetProductsData);
   });
 });

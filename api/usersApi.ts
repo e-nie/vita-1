@@ -6,4 +6,4 @@ export const registerUser = async (request, payload) => {
       Accept: 'application/json',
     },
   });
-}; //https://api-v1.practicesoftwaretesting.com/products
+};
