@@ -8,8 +8,8 @@ export class HomePage {
   // Sorting constants
   private readonly SORT_NAME_ASC = 'name,asc';
   private readonly SORT_NAME_DESC = 'name,desc';
-  private readonly SORT_PRICE_DESC = 'price,desc';
   private readonly SORT_PRICE_ASC = 'price,asc';
+  private readonly SORT_PRICE_DESC = 'price,desc';
 
   private productName: Locator;
   //SEARCH
@@ -46,7 +46,6 @@ export class HomePage {
     await this.searchField.fill(query);
     await this.searchSubmit.click();
   }
-
   async verifySearchResults(query: string) {
     await expect(this.searchCaption).toContainText(query);
     await expect(this.searchResults).toContainText(query);
@@ -64,12 +63,13 @@ export class HomePage {
     );
     expect(matchingProducts.length).toBeGreaterThan(0);
   }
-
   async resetSearch() {
     await this.searchReset.click();
     await expect(this.searchField).toHaveValue('');
   }
 
+
+  //mentor's code
   async sortBy(sortType: SortType) {
     await this.sortField.selectOption(sortType);
   }
@@ -83,5 +83,9 @@ export class HomePage {
     return productNames.map((name) => name.trim());
   }
 
+  async getProductPrices() {
+    const productPrices = await this.page.locator('data-test=product-price').allTextContents();
+    return productPrices.map((price) => price.trim());
+  }
   //sort methods
 }
