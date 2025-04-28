@@ -9,13 +9,13 @@ test.describe('Sort products functionality - POSITIVE', () => {
   });
 
   test('should sort products by name in ascending order', async ({ homePage }) => {
-    await homePage.sortBy('name,asc');
+    await homePage.sortBy('name,asc');// sort products on the page
 
     await expect
       .poll(async () => {
-        const productsOnThePage = await homePage.getProductNames();
-        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c']
-        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+        const productsOnThePage = await homePage.getProductNames();// ['a', 'b', 'c']// get sorted products on the page
+        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c'] sorts same before sorted products with js
+        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);// compare sorted products from page  with products sorted with js
       })
       .toEqual(true);
   });
