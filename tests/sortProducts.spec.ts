@@ -40,21 +40,23 @@ test.describe('Sort products functionality - POSITIVE', () => {
     await expect
       .poll(async () => {
         const productsOnThePage = await homePage.getProductPrices();
-        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c']
+        const sortedProductsOnThePage = [...productsOnThePage].sort(); 
         return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
       })
       .toEqual(true);
   });
 
   test('should sort products by price in descending order', async ({ homePage }) => {
-    await homePage.sortBy('name,asc');
+    await homePage.sortBy('price,desc');
 
     await expect
-      .poll(async () => {
-        const productsOnThePage = await homePage.getProductPrices();
-        const sortedProductsOnThePage = [...productsOnThePage].sort(); // ['a', 'b', 'c']
-        return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
-      })
-      .toEqual(true);
+    .poll(async () => {
+      const productsOnThePage = await homePage.getProductPrices();
+      const sortedProductsOnThePage = [...productsOnThePage].sort((a: string, b: string) =>
+        b.localeCompare(a),
+      );  
+      return areEqualShallow(productsOnThePage, sortedProductsOnThePage);
+    })
+    .toEqual(true);
   });
 });
