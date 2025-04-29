@@ -8,9 +8,9 @@ test('get product by id', async ({ request }) => {
     "name": "YO Product",
     "description": "test",
     "price": 1.99,
-    "category_id": "01JSWM7ZV98V99WA3X5KTKJXED",
-    "brand_id": "01JSWM7ZSS1H9EG3W74Q1X2ZEH",
-    "product_image_id": "01JSWM7ZW2R89XDDW1S93TEZ37",
+    "category_id": "01JSYEKHEE2M0GZ827NNWTDPGQ",
+    "brand_id": "01JSYEKHCR378XGRYYK40F0AVW",
+    "product_image_id": "01JSYEKHF0SSC1XT0R7W3K0BTG",
     "is_location_offer": true,
     "is_rental": false
   }
@@ -29,12 +29,15 @@ test('get product by id', async ({ request }) => {
 
   expect(response.ok()).toBeTruthy();
 
-  const responseBody = await response.json();
+  const responseBody = await response.json();// do i need to list all unnoetiged fields here?
   const validationData = {
     id: responseBody.id,
     name: responseBody.name,
     description: responseBody.description,
     price: responseBody.price,
+    is_location_offer: responseBody.is_location_offer,
+    is_rental: responseBody.is_rental,
+    in_stock: responseBody.in_stock,
     product_image: {
       id: responseBody.product_image.id,
       by_name: responseBody.product_image.by_name,
@@ -57,6 +60,18 @@ test('get product by id', async ({ request }) => {
     },
   };
 
-
+//todo
   expect(validationData.id).toEqual(productId);
+
+  expect(validationData.name).toBe(payload.name);
+  expect(validationData.description).toBe(payload.description);
+  expect(validationData.price).toBe(payload.price);
+  expect(validationData.category.id).toBe(payload.category_id);
+  expect(validationData.brand.id).toBe(payload.brand_id);
+  expect(validationData.product_image.id).toBe(payload.product_image_id);
+  expect(validationData.is_location_offer).toBe(payload.is_location_offer);
+  expect(validationData.is_rental).toBe(payload.is_rental);
+
+
+
 });

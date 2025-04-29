@@ -12,6 +12,7 @@ test.describe('Search Functionality - POSITIVE', () => {
     const testProduct = products[0]; // Combination Pliers
     await homePage.searchForProduct(testProduct.name);
     await homePage.verifySearchResults(testProduct.name);
+    
   });
 
   //Test reset search

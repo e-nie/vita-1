@@ -1,15 +1,8 @@
 import { Locator, Page, expect } from '@playwright/test';
-
-export type SortType = 'name,asc' | 'name,desc' | 'price,desc' | 'price,asc';
+import { SortProducts } from '../pageElements/sortProducts';
 
 export class HomePage {
   private URL = '/';
-
-  // Sorting constants
-  private readonly SORT_NAME_ASC = 'name,asc';
-  private readonly SORT_NAME_DESC = 'name,desc';
-  private readonly SORT_PRICE_ASC = 'price,asc';
-  private readonly SORT_PRICE_DESC = 'price,desc';
 
   private productName: Locator;
   //SEARCH
@@ -20,17 +13,17 @@ export class HomePage {
   private searchResults: Locator;
 
   //SORT
-  private sortField: Locator;
+  //todo  -- check name!!! This is a page element
+  sortSelect: SortProducts;
 
   constructor(private page: Page) {
-    this.productName = this.page.locator('data-test=product-name');
+    this.productName = page.locator('data-test=product-name');
     this.searchField = page.locator('data-test=search-query');
     this.searchSubmit = page.locator('data-test=search-submit');
     this.searchReset = page.locator('data-test=search-reset');
     this.searchCaption = page.locator('data-test=search-term');
     this.searchResults = page.locator('data-test=search_completed');
-
-    this.sortField = page.locator('data-test=sort');
+    this.sortSelect = new SortProducts(page);
   }
 
   async openViaUrl() {
@@ -68,11 +61,7 @@ export class HomePage {
     await expect(this.searchField).toHaveValue('');
   }
 
-
   //mentor's code
-  async sortBy(sortType: SortType) {
-    await this.sortField.selectOption(sortType);
-  }
 
   async verifyProductsDisplayed() {
     await expect(this.productName.first()).toBeVisible();

@@ -4,15 +4,17 @@ import { storeProduct } from '../../api/productsApi';
 //todo 
 test('verify product stored successfully', async ({ request }) => {
   const payload = {
-    "name": "YO Product",
+    "name": "YO-1 Product",
     "description": "test",
     "price": 1.99,
-    "category_id": "01JSWM7ZV98V99WA3X5KTKJXED",
-    "brand_id": "01JSWM7ZSS1H9EG3W74Q1X2ZEH",
-    "product_image_id": "01JSWM7ZW2R89XDDW1S93TEZ37",
+    "category_id": "01JSYEKHEE2M0GZ827NNWTDPGQ",
+    "brand_id": "01JSYEKHCR378XGRYYK40F0AVW",
+    "product_image_id": "01JSYEKHF0SSC1XT0R7W3K0BTF",
     "is_location_offer": true,
     "is_rental": false
   }
+
+  //"id": "01JSYEKHFV3WXEE4QQBV6SEGDY",
 
   const response = await storeProduct(request, payload);
 
@@ -43,6 +45,15 @@ test('verify product stored successfully', async ({ request }) => {
   
   // Check that all fields from payload exist in the response (with appropriate nesting)
   expect(validationData).toMatchObject(payload);
+  // Check that the response contains the expected fields
+  expect(validationData.name).toBe(payload.name);
+  expect(validationData.description).toBe(payload.description);
+  expect(validationData.price).toBe(payload.price);
+  expect(validationData.category_id).toBe(payload.category_id);
+  expect(validationData.brand_id).toBe(payload.brand_id);
+  expect(validationData.product_image_id).toBe(payload.product_image_id);
+  expect(validationData.is_location_offer).toBe(payload.is_location_offer);
+  expect(validationData.is_rental).toBe(payload.is_rental);
 });
 
 
