@@ -17,6 +17,6 @@ test.describe('Search Functionality - POSITIVE', () => {
 
   //Test reset search
   test('should reset search results', async ({ homePage }) => {
-    await homePage.resetSearch();
+    await homePage.searchInput.resetSearch();
   });
 });

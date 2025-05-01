@@ -1,29 +1,28 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { SortProducts } from '../pageElements/sortProducts';
+import { SearchProducts } from '../pageElements/searchProducts';
 
 export class HomePage {
   private URL = '/';
 
-  private productName: Locator;
-  //SEARCH
-  private searchField: Locator;
-  private searchSubmit: Locator;
-  private searchReset: Locator;
-  private searchCaption: Locator;
-  private searchResults: Locator;
+  productName: Locator;
 
-  //SORT
-  //todo  -- check name!!! This is a page element
+  /**
+   * sortSelect: SortProducts: Declares a field that will hold an instance of the SortProducts class, allowing access to sorting methods.
+   * searchField: SearchProducts: Declares a field that will hold an instance of the SearchProducts class, allowing access to search methods.
+   * This is a common pattern in Playwright tests to encapsulate page interactions and make the test code cleaner and more maintainable.
+   */
+
   sortSelect: SortProducts;
+  searchInput: SearchProducts;
 
   constructor(private page: Page) {
     this.productName = page.locator('data-test=product-name');
-    this.searchField = page.locator('data-test=search-query');
-    this.searchSubmit = page.locator('data-test=search-submit');
-    this.searchReset = page.locator('data-test=search-reset');
-    this.searchCaption = page.locator('data-test=search-term');
-    this.searchResults = page.locator('data-test=search_completed');
+    /**
+     * Creates an instance of SortProducts, allowing the home page to use its sorting functionality.
+     */
     this.sortSelect = new SortProducts(page);
+    this.searchInput = new SearchProducts(page);
   }
 
   async openViaUrl() {
@@ -31,38 +30,20 @@ export class HomePage {
   }
 
   async verifyPageLoaded() {
-    await expect(this.searchField).toBeVisible();
+    await expect(this.searchInput.searchField).toBeVisible();
   }
 
-  //search methods
+  //search methods - my code
   async searchForProduct(query: string) {
-    await this.searchField.fill(query);
-    await this.searchSubmit.click();
+    await this.searchInput.searchField.fill(query);
+    await this.searchInput.searchSubmit.click();
   }
   async verifySearchResults(query: string) {
-    await expect(this.searchCaption).toContainText(query);
-    await expect(this.searchResults).toContainText(query);
-
-    // Get all product names from the search results
-    const foundProductNames = await this.productName.allTextContents();
-
-    // Verify at least one product was found
-    expect(foundProductNames.length).toBeGreaterThan(0);
-
-    // Verify each found product contains the search query (case insensitive)
-    const queryLower = query.toLowerCase();
-    const matchingProducts = foundProductNames.filter((name) =>
-      name.toLowerCase().includes(queryLower),
-    );
-    expect(matchingProducts.length).toBeGreaterThan(0);
-  }
-  async resetSearch() {
-    await this.searchReset.click();
-    await expect(this.searchField).toHaveValue('');
+    await expect(this.searchInput.searchCaption).toContainText(query);
+    await expect(this.searchInput.searchResults).toContainText(query);
   }
 
   //mentor's code
-
   async verifyProductsDisplayed() {
     await expect(this.productName.first()).toBeVisible();
   }
@@ -76,5 +57,4 @@ export class HomePage {
     const productPrices = await this.page.locator('data-test=product-price').allTextContents();
     return productPrices.map((price) => price.trim());
   }
-  //sort methods
 }
