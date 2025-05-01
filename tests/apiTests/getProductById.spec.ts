@@ -1,16 +1,40 @@
 import { test, expect } from '@playwright/test';
 import { storeProduct, getProductById } from '../../api/productsApi';
+import { getAllCategories } from '../../api/categoriesApi';
+import { getAllBrands } from '../../api/brandsApi';
+import { getAllImages } from '../../api/imagesApi';
 
 test('get product by id', async ({ request }) => {
+//getCategoryId
+const responseCategories = await getAllCategories(request);
+const responseCategoriesBody = await responseCategories.json();
+//console.log('responseCategoriesBody:', responseCategoriesBody);
+const categoryId = responseCategoriesBody[0].id;
 
+//getBrandId
+const responseBrands = await getAllBrands(request);
+const responseBrandsBody = await responseBrands.json();
+const brandId = responseBrandsBody[0].id;
+
+//getImageId
+const responseImages = await getAllImages(request);
+const responseImagesBody = await responseImages.json();
+const imageId = responseImagesBody[0].id;
+
+function generateRandomProductName() {
+  const timestamp = Date.now(); // Get current timestamp
+  return `Product name: ${timestamp}`;
+}
+
+const randomProductName = generateRandomProductName();
   //create new product
   const payload = {
-    "name": "YO Product",
+    "name": randomProductName,
     "description": "test",
     "price": 1.99,
-    "category_id": "01JSYEKHEE2M0GZ827NNWTDPGQ",
-    "brand_id": "01JSYEKHCR378XGRYYK40F0AVW",
-    "product_image_id": "01JSYEKHF0SSC1XT0R7W3K0BTG",
+    "category_id":categoryId,
+    "brand_id": brandId,
+    "product_image_id": imageId,
     "is_location_offer": true,
     "is_rental": false
   }
