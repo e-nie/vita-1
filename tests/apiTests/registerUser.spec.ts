@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { registerUser } from '../../api/usersApi';
+import { getRandomString } from '../../data/getRandomString';
 
 test('verify user registered successfully', async ({ request }) => {
+  const randomString = getRandomString(5);
+
   const payload = {
     first_name: 'nose1',
     last_name: 'Doe',
@@ -15,13 +18,15 @@ test('verify user registered successfully', async ({ request }) => {
     phone: '0987654321',
     dob: '1970-01-01',
     password: 'SuperSecure@123',
-    email: 'john@doe.example',
+    email: randomString + '@doe.example',
   };
   const response = await registerUser(request, payload);
 
+  console.log(response.status());
   expect(response.ok()).toBeTruthy(); //status code 200
 
   const responseBody = await response.json();
+  console.log(response.status());
   const validationData = {
     first_name: responseBody.first_name,
     last_name: responseBody.last_name,
@@ -36,6 +41,6 @@ test('verify user registered successfully', async ({ request }) => {
       postal_code: responseBody.address.postal_code,
     },
   };
-
+  console.log(validationData.email);
   expect(payload).toMatchObject(validationData);
 });
