@@ -7,7 +7,7 @@ test.describe('HomePage - POSITIVE', () => {
   });
 
   test('should display search results for valid queries', async ({ homePage }) => {
-    await homePage.searchForProduct('hammer');
-    await homePage.verifySearchResults('hammer');
+    await homePage.searchInput.searchForProduct('hammer');
+    await homePage.searchInput.verifySearchResults('hammer');
   });
 });

@@ -10,8 +10,8 @@ test.describe('Search Functionality - POSITIVE', () => {
   // Test exact product name search
   test('should find product by exact name', async ({ homePage }) => {
     const testProduct = products[0]; // Combination Pliers
-    await homePage.searchForProduct(testProduct.name);
-    await homePage.verifySearchResults(testProduct.name);
+    await homePage.searchInput.searchForProduct(testProduct.name);
+    await homePage.searchInput.verifySearchResults(testProduct.name);
     
   });
 

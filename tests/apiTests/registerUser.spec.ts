@@ -3,7 +3,7 @@ import { registerUser } from '../../api/usersApi';
 
 test('verify user registered successfully', async ({ request }) => {
   const payload = {
-    first_name: 'nose',
+    first_name: 'nose1',
     last_name: 'Doe',
     address: {
       street: 'Street 1',

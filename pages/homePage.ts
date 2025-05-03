@@ -6,6 +6,7 @@ export class HomePage {
   private URL = '/';
 
   productName: Locator;
+  banner: Locator;
 
   /**
    * sortSelect: SortProducts: Declares a field that will hold an instance of the SortProducts class, allowing access to sorting methods.
@@ -18,6 +19,9 @@ export class HomePage {
 
   constructor(private page: Page) {
     this.productName = page.locator('data-test=product-name');
+    // this.banner = page.locator('img[alt=Banner]');//css option
+    this.banner = page.getByRole('img', { name: 'Banner' });//in-built Playwright option (user-visible locator)
+
     /**
      * Creates an instance of SortProducts, allowing the home page to use its sorting functionality.
      */
@@ -30,17 +34,7 @@ export class HomePage {
   }
 
   async verifyPageLoaded() {
-    await expect(this.searchInput.searchField).toBeVisible();
-  }
-
-  //search methods - my code
-  async searchForProduct(query: string) {
-    await this.searchInput.searchField.fill(query);
-    await this.searchInput.searchSubmit.click();
-  }
-  async verifySearchResults(query: string) {
-    await expect(this.searchInput.searchCaption).toContainText(query);
-    await expect(this.searchInput.searchResults).toContainText(query);
+    await expect(this.banner).toBeVisible();
   }
 
   //mentor's code
