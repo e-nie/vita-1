@@ -1,33 +1,50 @@
 import { test, expect } from '@playwright/test';
 import { storeProduct } from '../../api/productsApi';
+import { getAllCategories } from '../../api/categoriesApi';
+import { getAllBrands } from '../../api/brandsApi';
+import { getAllImages } from '../../api/imagesApi';
 
-//todo 
+
 test('verify product stored successfully', async ({ request }) => {
+//getCategoryId
+  const responseCategories = await getAllCategories(request);
+  const responseCategoriesBody = await responseCategories.json();
+  //console.log('responseCategoriesBody:', responseCategoriesBody);
+  const categoryId = responseCategoriesBody[0].id;
+
+  //getBrandId
+  const responseBrands = await getAllBrands(request);
+  const responseBrandsBody = await responseBrands.json();
+  const brandId = responseBrandsBody[0].id;
+
+  //getImageId
+  const responseImages = await getAllImages(request);
+  const responseImagesBody = await responseImages.json();
+  const imageId = responseImagesBody[0].id;
+
+  function generateRandomProductName() {
+    const timestamp = Date.now(); // Get current timestamp
+    return `Product name: ${timestamp}`;
+  }
+
+  const randomProductName = generateRandomProductName();
+  //create new product
   const payload = {
-    "name": "YO-12Product",
-    "description": "test",
-    "price": 1.99,
-    "category_id": "01JSYEKHEE2M0GZ827NNWTDPGQ",
-    "brand_id": "01JSYEKHCR378XGRYYK40F0AVW",
-    "product_image_id": "01JSYEKHF0SSC1XT0R7W3K0BTF",
-    "is_location_offer": true,
-    "is_rental": false
-  }
+    name: randomProductName,
+    description: 'test',
+    price: 1.99,
+    category_id: categoryId,
+    brand_id: brandId,
+    product_image_id: imageId,
+    is_location_offer: true,
+    is_rental: false,
+  };
 
-  //"id": "01JSYEKHFV3WXEE4QQBV6SEGDY",
-
+  //create new product
   const response = await storeProduct(request, payload);
-
-  // Log detailed error information
-  if (!response.ok()) {
-    console.log('Status:', response.status());
-    console.log('Status Text:', response.statusText());
-    const errorBody = await response.text();
-    console.log('Error Body:', errorBody);
-  }
-
   expect(response.ok()).toBeTruthy(); //status code 200 - 299
 
+  // get newProductResponseBody
   const responseBody = await response.json();
   console.log('Response Body:', responseBody);
   
