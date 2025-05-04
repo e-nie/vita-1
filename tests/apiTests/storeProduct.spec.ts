@@ -4,7 +4,7 @@ import { storeProduct } from '../../api/productsApi';
 //todo 
 test('verify product stored successfully', async ({ request }) => {
   const payload = {
-    "name": "YO-1 Product",
+    "name": "YO-12Product",
     "description": "test",
     "price": 1.99,
     "category_id": "01JSYEKHEE2M0GZ827NNWTDPGQ",
