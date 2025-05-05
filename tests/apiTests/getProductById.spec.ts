@@ -264,7 +264,7 @@ test('get product by id - 4, with ZOD validation', async ({ request }) => {
   const responseBody = await response.json();
   console.log('Response body:', responseBody);
 
-  //  validate response body with Zod schema
+  //  validate response body with Zod schema - do we need expect here?
 
   const validationResult = ProductSchema.safeParse(responseBody); // may be just parse()?
   if (!validationResult.success) {

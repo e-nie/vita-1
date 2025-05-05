@@ -23,10 +23,11 @@ test('verify user registered successfully', async ({ request }) => {
   const response = await registerUser(request, payload);
 
   console.log(response.status());
-  expect(response.ok()).toBeTruthy(); //status code 200
+   expect(response.ok()).toBeTruthy(); //status code 200
 
   const responseBody = await response.json();
   console.log(response.status());
+  console.log(responseBody);
   const validationData = {
     first_name: responseBody.first_name,
     last_name: responseBody.last_name,
