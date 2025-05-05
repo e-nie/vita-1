@@ -181,10 +181,13 @@ test('get product by id -3', async ({ request }) => {
   //get product by id
   const response = await getProductById(request, productId);
   console.log(response);
+ 
 
   expect(response.ok()).toBeTruthy();
 
   const responseBody = await response.json();
+  //validate response body with Zod schema
+  ProductSchema.parse(responseBody);
 
   //приводим данные запроса к формату ответа (берем формат из постмана, а ответ будем из пэйлоада)
   const validationData = {
@@ -212,80 +215,3 @@ test('get product by id -3', async ({ request }) => {
 //Mentor recommends approaches 1 & 3
 
 //HOMEWORK
-test('get product by id - 4, with ZOD validation', async ({ request }) => {
-  //getCategoryId
-  const responseCategories = await getAllCategories(request);
-  const responseCategoriesBody = await responseCategories.json();
-  //console.log('responseCategoriesBody:', responseCategoriesBody);
-  const categoryId = responseCategoriesBody[0].id;
-
-  //getBrandId
-  const responseBrands = await getAllBrands(request);
-  const responseBrandsBody = await responseBrands.json();
-  const brandId = responseBrandsBody[0].id;
-
-  //getImageId
-  const responseImages = await getAllImages(request);
-  const responseImagesBody = await responseImages.json();
-  const imageId = responseImagesBody[0].id;
-
-  function generateRandomProductName() {
-    const timestamp = Date.now(); // Get current timestamp
-    return `Product name: ${timestamp}`;
-  }
-
-  const randomProductName = generateRandomProductName();
-  //create   product payload
-  const payload = {
-    name: randomProductName,
-    description: 'test',
-    price: 1.99,
-    category_id: categoryId,
-    brand_id: brandId,
-    product_image_id: imageId,
-    is_location_offer: true,
-    is_rental: false,
-  };
-
-  //create new product
-  const responseNewProduct = await storeProduct(request, payload);
-
-  // get newProductResponseBody and extract productId
-  const responseNewProductBody = await responseNewProduct.json();
-  const productId = responseNewProductBody.id;
-  console.log('New Product ID:', productId);
-
-  //get product by id
-  const response = await getProductById(request, productId);
-  console.log(response);
-  expect(response.ok()).toBeTruthy();
-
-  //parse response body
-  const responseBody = await response.json();
-  console.log('Response body:', responseBody);
-
-  //  validate response body with Zod schema - do we need expect here?
-
-  const validationResult = ProductSchema.safeParse(responseBody); // may be just parse()?
-  if (!validationResult.success) {
-    console.error('Validation errors:', validationResult.error.format());
-    throw new Error('Validation failed');
-  }
-
-  //type-safe access to validated data
-  const validatedResponseBody: Product = validationResult.data;
-  console.log('Validated response body:', validatedResponseBody);
-
-
-
-  //1. Option 1 - compare fields directly
-
-  expect(validatedResponseBody.name).toBe(payload.name);
-  expect(validatedResponseBody.description).toBe(payload.description);
-  expect(validatedResponseBody.price).toBe(payload.price);
-  expect(validatedResponseBody.category.id).toBe(payload.category_id);
-  expect(validatedResponseBody.brand.id).toBe(payload.brand_id);
-  expect(validatedResponseBody.product_image.id).toBe(payload.product_image_id);
-  expect(validatedResponseBody.is_location_offer).toBe(payload.is_location_offer);
-  expect(validatedResponseBody.is_rental).toBe(payload.is_rental);
-});

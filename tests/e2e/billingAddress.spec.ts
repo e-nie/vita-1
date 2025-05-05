@@ -48,7 +48,7 @@ test.describe('Billing Address', () => {
     await expect(banner).toBeVisible();
 
     //3. Add a product to the cart
-    await page.locator('img[alt="Combination Pliers"]').click();
+    await page.locator('img[alt="Combination Pliers"]').click(); //find all products and get first one
     await page.locator('[data-test=add-to-cart]').click();
     expect(
       await page.getByRole('alert', { name: 'Product added to shopping cart.' }).textContent(),
@@ -69,69 +69,61 @@ test.describe('Billing Address', () => {
     await checkout2.click();
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
-    await page.locator('[data-test="street"]').fill(responseBody.address.street);
-    await page.locator('[data-test="city"]').fill(responseBody.address.city);
-    await page.locator('[data-test="state"]').fill(responseBody.address.state);
-    await page.locator('[data-test="country"]').fill(responseBody.address.country);
-    await page.locator('[data-test="postal_code"]').fill(responseBody.address.postal_code);
-
     //7. Go to payment page
     await page.locator('[data-test="proceed-3"]').click();
     const paymentTitle = page.getByRole('heading', { name: 'Payment' });
     await expect(paymentTitle).toBeVisible();
 
-    //8. Choose payment method and fill in card details
+    //8. Choose payment method and fill in card details - create data file with card data
     await page.locator('[data-test=payment-method]').selectOption('Credit Card');
     await page.locator('[data-test=credit_card_number]').fill('4242-4242-4242-4242');
     await page.locator('[data-test=expiration_date]').fill('12/2028');
     await page.locator('[data-test=cvv]').fill('123');
     await page.locator('[data-test=card_holder_name]').fill('xoxoxox cocococ');
-    
+
     //9. Click on the "confirm" button and see the success message
-     await page.getByRole('button', { name: 'Confirm' }).click({ force: true });
+    await page.getByRole('button', { name: 'Confirm' }).click();
     const successMessage = page.locator('[data-test=payment-success-message]');
-    expect(successMessage).toBeVisible(); // ‼️NOT VISIBLE!!
+    await expect(successMessage).toBeVisible(); // ‼️NOT VISIBLE!!
     // const successMessageText = await successMessage.textContent();
 
     //10. Click on the Confirm button second time and go to confirmation page
-    await page.waitForTimeout(5000);
-    await page.locator('[data-test=finish]').click({ force: true });
-       const confirmationText = await page.locator('#order-confirmation').textContent();
-    expect(confirmationText).toContain('Thanks for your order!');
+    await expect(page.locator('[data-test=finish]')).toBeVisible();
+    await expect(page.locator('[data-test=finish]')).toBeEnabled();
+
+    await page.locator('[data-test=finish]').click();
+    await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
 
     //11. Go to the invoice page
-    await page.locator('[data-test=nav-menu]').click();
+    await page.locator('[data-test=nav-menu]').click();//use link text
     await page.locator('[data-test=nav-my-invoices]').click();
-    const pageTitle = await page.locator('[data-test=page-title]');
-    expect(pageTitle).toBeVisible();
-    expect(await pageTitle.textContent()).toBe('Invoices');
+    const pageTitle = page.locator('[data-test=page-title]');
+    await expect(pageTitle).toBeVisible();
+    expect(await pageTitle.textContent()).toBe('Invoices');//change like on 
 
     //12. Get the invoice Details
     await page.waitForTimeout(5000);
-    page.waitForNavigation()
-    await page.getByRole('link', { name: 'Details'}).click({ force: true });
+    // page.waitForNavigation();
+    await page.getByRole('link', { name: 'Details' }).click();
 
     await page.waitForLoadState('networkidle');
-    expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
+    await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
- 
+    // Verify each component of the address
+    // const billingAddressForm = page.locator('');
 
-// Verify each component of the address
-// const billingAddressForm = page.locator('');
+    const street = page.locator('[data-test=street]');
+    const postalCode = page.locator('[data-test=postal_code]');
+    const city = page.locator('[data-test=city]');
+    const state = page.locator('[data-test=state]');
+    const country = page.locator('[data-test=country]');
 
-const street =   page.locator('[data-test=street]');
-const postalCode =   page.locator('[data-test=postal_code]');
-const city =   page.locator('[data-test=city]');
-const state =   page.locator('[data-test=state]');
-const country =   page.locator('[data-test=country]');
+    await expect(street).toHaveValue(payload.address.street);//toHaveText()
+    await expect(city).toHaveValue(payload.address.city);
+    await expect(state).toHaveValue(payload.address.state);
+    await expect(postalCode).toHaveValue(payload.address.postal_code);
+    await expect(country).toHaveValue(payload.address.country);
 
-await expect(street).toHaveValue(payload.address.street);
-await expect(city).toHaveValue(payload.address.city);
-await expect(state).toHaveValue(payload.address.state);
-await expect(postalCode).toHaveValue(payload.address.postal_code);
-await expect(country).toHaveValue(payload.address.country);
-
-//add screenshot
-
+    //add screenshot
   });
 });
