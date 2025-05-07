@@ -1,6 +1,6 @@
 import { expect, test } from '../baseTest';
 
-const areEqualShallow = (a, b) => a.length === b.length && a.every((val, i) => val === b[i]);
+const areEqualShallow = (a, b) => a.length === b.length && a.every((val: any, i: string | number) => val === b[i]);
 
 test.describe('Sort products functionality - POSITIVE', () => {
   test.beforeEach(async ({ homePage }) => {

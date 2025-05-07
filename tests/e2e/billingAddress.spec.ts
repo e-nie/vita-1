@@ -1,4 +1,4 @@
-import { getRandomString } from '../../data/getRandomString';
+import { getRandomString } from '../../helpers/getRandomString';
 import { registerUser } from './../../api/usersApi';
 import { test, expect, Page } from '@playwright/test';
 
@@ -95,11 +95,11 @@ test.describe('Billing Address', () => {
     await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
 
     //11. Go to the invoice page
-    await page.locator('[data-test=nav-menu]').click();//use link text
+    await page.locator('[data-test=nav-menu]').click(); //use link text
     await page.locator('[data-test=nav-my-invoices]').click();
     const pageTitle = page.locator('[data-test=page-title]');
     await expect(pageTitle).toBeVisible();
-    expect(await pageTitle.textContent()).toBe('Invoices');//change like on 
+    expect(await pageTitle.textContent()).toBe('Invoices'); //change like on
 
     //12. Get the invoice Details
     await page.waitForTimeout(5000);
@@ -118,7 +118,7 @@ test.describe('Billing Address', () => {
     const state = page.locator('[data-test=state]');
     const country = page.locator('[data-test=country]');
 
-    await expect(street).toHaveValue(payload.address.street);//toHaveText()
+    await expect(street).toHaveValue(payload.address.street); //toHaveText()
     await expect(city).toHaveValue(payload.address.city);
     await expect(state).toHaveValue(payload.address.state);
     await expect(postalCode).toHaveValue(payload.address.postal_code);

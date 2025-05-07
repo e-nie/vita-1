@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { registerUser } from '../../api/usersApi';
-import { getRandomString } from '../../data/getRandomString';
+import { getRandomString } from '../../helpers/getRandomString';
 
 test('verify user registered successfully', async ({ request }) => {
   const randomString = getRandomString(5);
@@ -23,7 +23,7 @@ test('verify user registered successfully', async ({ request }) => {
   const response = await registerUser(request, payload);
 
   console.log(response.status());
-   expect(response.ok()).toBeTruthy(); //status code 200
+  expect(response.ok()).toBeTruthy(); //status code 200
 
   const responseBody = await response.json();
   console.log(response.status());
