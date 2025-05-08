@@ -17,7 +17,7 @@ export class HomePage {
   sortSelect: SortProducts;
   searchInput: SearchProducts;
 
-  constructor(private page: Page) {
+  constructor( page: Page) {
     this.productName = page.locator('data-test=product-name');
     // this.banner = page.locator('img[alt=Banner]');//css option
     this.banner = page.getByRole('img', { name: 'Banner' });//in-built Playwright option (user-visible locator)

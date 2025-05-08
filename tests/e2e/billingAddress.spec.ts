@@ -1,7 +1,7 @@
 import { getRandomString } from '../../helpers/getRandomString';
 import { registerUser } from './../../api/usersApi';
 import { test, expect, Page } from '@playwright/test';
-
+import { validCard } from '../../data/paymentData';  
 test.describe('Billing Address', () => {
   test('verify invoice billing address with default address', async ({ request, page }) => {
     //1. Register a new user via API
@@ -43,18 +43,31 @@ test.describe('Billing Address', () => {
     expect(await page.locator('[data-test=page-title]').textContent()).toBe('My account');
 
     //2. Go to home page
-    await page.locator('[data-test=nav-home]').click();
+    await page.goto('https://practicesoftwaretesting.com/');
+    await expect(page).toHaveURL('https://practicesoftwaretesting.com/');
     const banner = page.locator('img[alt="Banner"]');
     await expect(banner).toBeVisible();
 
-    //3. Add a product to the cart
+    //3. Add a product to the cart old way
     await page.locator('img[alt="Combination Pliers"]').click(); //find all products and get first one
+
+    //todo
+    //get all products which are in stock - TEST FAILS, DEBUGGER IS FINE!!!
+    //😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩
+    // const inStockProducts = page.locator('.card-footer:not(:has-text("Out of stock"))').filter();
+    // await inStockProducts.first().waitFor({ state: 'visible' });
+    // await inStockProducts.first().click();
+
+    //go to product page
+  //  expect( page.locator('[data-test="product-name]')).toBeVisible()
     await page.locator('[data-test=add-to-cart]').click();
+
     expect(
       await page.getByRole('alert', { name: 'Product added to shopping cart.' }).textContent(),
     ).toBe(' Product added to shopping cart. ');
 
     //4. Go to shopping cart page
+
     await page.locator('[data-test=cart-quantity]').click();
     await expect(page.locator('th:has-text("Item")')).toBeVisible();
     await expect(page.locator('th:has-text("Quantity")')).toBeVisible();
@@ -62,6 +75,7 @@ test.describe('Billing Address', () => {
     await expect(page.locator('th:has-text("Total")')).toBeVisible();
 
     //5. Go to checkout page
+    await page.goto('https://practicesoftwaretesting.com/checkout');
     await page.locator('[data-test=proceed-1]').click();
     const checkout2 = page.locator('[data-test=proceed-2]');
     await expect(checkout2).toBeVisible();
@@ -69,6 +83,7 @@ test.describe('Billing Address', () => {
     await checkout2.click();
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
+   
     //7. Go to payment page
     await page.locator('[data-test="proceed-3"]').click();
     const paymentTitle = page.getByRole('heading', { name: 'Payment' });
@@ -76,10 +91,10 @@ test.describe('Billing Address', () => {
 
     //8. Choose payment method and fill in card details - create data file with card data
     await page.locator('[data-test=payment-method]').selectOption('Credit Card');
-    await page.locator('[data-test=credit_card_number]').fill('4242-4242-4242-4242');
-    await page.locator('[data-test=expiration_date]').fill('12/2028');
-    await page.locator('[data-test=cvv]').fill('123');
-    await page.locator('[data-test=card_holder_name]').fill('xoxoxox cocococ');
+    await page.locator('[data-test=credit_card_number]').fill(validCard.cardNumber);
+    await page.locator('[data-test=expiration_date]').fill(validCard.expirationDate);
+    await page.locator('[data-test=cvv]').fill(validCard.cvv);
+    await page.locator('[data-test=card_holder_name]').fill(validCard.cardHolderName);
 
     //9. Click on the "confirm" button and see the success message
     await page.getByRole('button', { name: 'Confirm' }).click();
@@ -95,14 +110,15 @@ test.describe('Billing Address', () => {
     await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
 
     //11. Go to the invoice page
-    await page.locator('[data-test=nav-menu]').click(); //use link text
-    await page.locator('[data-test=nav-my-invoices]').click();
+    await page.goto('https://practicesoftwaretesting.com/account/invoices');
+    // await page.locator('[data-test=nav-menu]').click(); //use link text
+    // await page.locator('[data-test=nav-my-invoices]').click();
     const pageTitle = page.locator('[data-test=page-title]');
     await expect(pageTitle).toBeVisible();
     expect(await pageTitle.textContent()).toBe('Invoices'); //change like on
 
     //12. Get the invoice Details
-    await page.waitForTimeout(5000);
+    // await page.waitForTimeout(5000);
     // page.waitForNavigation();
     await page.getByRole('link', { name: 'Details' }).click();
 
