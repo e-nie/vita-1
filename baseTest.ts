@@ -1,5 +1,7 @@
 import { test as baseTest } from '@playwright/test';
 import { HomePage } from './pages/homePage';
+import { LoginPage } from './pages/loginPage';
+import { ProductPage } from './pages/productPage';
 
 type PomFixtures = {
   homePage: HomePage;
