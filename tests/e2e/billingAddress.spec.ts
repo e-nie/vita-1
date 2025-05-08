@@ -1,7 +1,7 @@
 import { getRandomString } from '../../helpers/getRandomString';
 import { registerUser } from './../../api/usersApi';
 import { test, expect, Page } from '@playwright/test';
-import { validCard } from '../../data/paymentData';  
+import { validCard } from '../../data/paymentData';
 test.describe('Billing Address', () => {
   test('verify invoice billing address with default address', async ({ request, page }) => {
     //1. Register a new user via API
@@ -54,12 +54,16 @@ test.describe('Billing Address', () => {
     //todo
     //get all products which are in stock - TEST FAILS, DEBUGGER IS FINE!!!
     //😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩
+    //  const inStockProducts = expect(page.getByRole('listitem').filter({ hasNotText: 'Out of stock' }))
+    //  inStockProducts.toBeVisible();
+
+    // const inStockProducts = page.locator('.card-footer').filter({hasNotText: 'Out of stock'});
     // const inStockProducts = page.locator('.card-footer:not(:has-text("Out of stock"))').filter();
     // await inStockProducts.first().waitFor({ state: 'visible' });
     // await inStockProducts.first().click();
 
     //go to product page
-  //  expect( page.locator('[data-test="product-name]')).toBeVisible()
+    //  expect( page.locator('[data-test="product-name]')).toBeVisible()
     await page.locator('[data-test=add-to-cart]').click();
 
     expect(
@@ -79,11 +83,11 @@ test.describe('Billing Address', () => {
     await page.locator('[data-test=proceed-1]').click();
     const checkout2 = page.locator('[data-test=proceed-2]');
     await expect(checkout2).toBeVisible();
+
     //6. Verify billing address
     await checkout2.click();
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
-   
     //7. Go to payment page
     await page.locator('[data-test="proceed-3"]').click();
     const paymentTitle = page.getByRole('heading', { name: 'Payment' });
@@ -113,15 +117,17 @@ test.describe('Billing Address', () => {
     await page.goto('https://practicesoftwaretesting.com/account/invoices');
     // await page.locator('[data-test=nav-menu]').click(); //use link text
     // await page.locator('[data-test=nav-my-invoices]').click();
-    const pageTitle = page.locator('[data-test=page-title]');
-    await expect(pageTitle).toBeVisible();
-    expect(await pageTitle.textContent()).toBe('Invoices'); //change like on
+    await expect(page.locator('[data-test=page-title]')).toHaveText('Invoices');
+
+    //verify that the data is downloaded - and the invoice row is not empty
+    const row = page.locator('table tbody tr').first();
+    await expect(row.locator('td').nth(0)).toHaveText(/\S/); // Invoice Number
+    await expect(row.locator('td').nth(1)).toHaveText(/\S/); // Billing Address
+    await expect(row.locator('td').nth(2)).toHaveText(/\S/); // Invoice Date
+    await expect(row.locator('td').nth(3)).toHaveText(/\S/); // Total
 
     //12. Get the invoice Details
-    // await page.waitForTimeout(5000);
-    // page.waitForNavigation();
     await page.getByRole('link', { name: 'Details' }).click();
-
     await page.waitForLoadState('networkidle');
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
@@ -134,7 +140,7 @@ test.describe('Billing Address', () => {
     const state = page.locator('[data-test=state]');
     const country = page.locator('[data-test=country]');
 
-    await expect(street).toHaveValue(payload.address.street); //toHaveText()
+    await expect(street).toHaveValue(payload.address.street); //tag input in DOM,type=text readonly; and input has a value
     await expect(city).toHaveValue(payload.address.city);
     await expect(state).toHaveValue(payload.address.state);
     await expect(postalCode).toHaveValue(payload.address.postal_code);
