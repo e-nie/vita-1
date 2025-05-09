@@ -4,6 +4,7 @@ import { SearchProducts } from '../pageElements/searchProducts';
 
 export class HomePage {
   private URL = '/';
+  
 
   productName: Locator;
   banner: Locator;
@@ -17,8 +18,9 @@ export class HomePage {
   sortSelect: SortProducts;
   searchInput: SearchProducts;
 
-  constructor( page: Page) {
-    this.productName = page.locator('data-test=product-name');
+  constructor( private page: Page) {
+    this.page = page;
+    this.productName = page.locator('[data-test=product-name]');
     // this.banner = page.locator('img[alt=Banner]');//css option
     this.banner = page.getByRole('img', { name: 'Banner' });//in-built Playwright option (user-visible locator)
 
@@ -48,7 +50,7 @@ export class HomePage {
   }
 
   async getProductPrices() {
-    const productPrices = await this.page.locator('data-test=product-price').allTextContents();
+    const productPrices = await this.page.locator('[data-test=product-price]').allTextContents();
     return productPrices.map((price) => price.trim());
   }
 }

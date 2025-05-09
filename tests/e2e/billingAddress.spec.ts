@@ -70,22 +70,20 @@ test.describe('Billing Address', () => {
       await page.getByRole('alert', { name: 'Product added to shopping cart.' }).textContent(),
     ).toBe(' Product added to shopping cart. ');
 
-    //4. Go to shopping cart page
-
+    //4. Go to shopping cart page/checkout - DONE
     await page.locator('[data-test=cart-quantity]').click();
     await expect(page.locator('th:has-text("Item")')).toBeVisible();
     await expect(page.locator('th:has-text("Quantity")')).toBeVisible();
     await expect(page.locator('th:has-text("Price")')).toBeVisible();
     await expect(page.locator('th:has-text("Total")')).toBeVisible();
 
-    //5. Go to checkout page
+    //5. Go to sign-in page/checkout - DONE
     await page.goto('https://practicesoftwaretesting.com/checkout');
     await page.locator('[data-test=proceed-1]').click();
-    const checkout2 = page.locator('[data-test=proceed-2]');
-    await expect(checkout2).toBeVisible();
+    await expect(page.locator('[data-test=proceed-2]')).toBeVisible();
 
-    //6. Verify billing address
-    await checkout2.click();
+    //6. Verify billing address - DONE
+    await page.locator('[data-test=proceed-2]').click();
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
     //7. Go to payment page
@@ -93,40 +91,39 @@ test.describe('Billing Address', () => {
     const paymentTitle = page.getByRole('heading', { name: 'Payment' });
     await expect(paymentTitle).toBeVisible();
 
-    //8. Choose payment method and fill in card details - create data file with card data
+    //8. Choose payment method and fill in card details - create data file with card data - DONE
     await page.locator('[data-test=payment-method]').selectOption('Credit Card');
     await page.locator('[data-test=credit_card_number]').fill(validCard.cardNumber);
     await page.locator('[data-test=expiration_date]').fill(validCard.expirationDate);
     await page.locator('[data-test=cvv]').fill(validCard.cvv);
     await page.locator('[data-test=card_holder_name]').fill(validCard.cardHolderName);
 
-    //9. Click on the "confirm" button and see the success message
+    //9. Click on the "confirm" button and see the success message - DONE
     await page.getByRole('button', { name: 'Confirm' }).click();
     const successMessage = page.locator('[data-test=payment-success-message]');
     await expect(successMessage).toBeVisible(); // ‼️NOT VISIBLE!!
     // const successMessageText = await successMessage.textContent();
 
-    //10. Click on the Confirm button second time and go to confirmation page
+    //10. Click on the Confirm button second time and go to confirmation page - DONE
     await expect(page.locator('[data-test=finish]')).toBeVisible();
     await expect(page.locator('[data-test=finish]')).toBeEnabled();
-
     await page.locator('[data-test=finish]').click();
     await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
 
-    //11. Go to the invoice page
+    //11. Go to the invoice page - DONE
     await page.goto('https://practicesoftwaretesting.com/account/invoices');
     // await page.locator('[data-test=nav-menu]').click(); //use link text
     // await page.locator('[data-test=nav-my-invoices]').click();
     await expect(page.locator('[data-test=page-title]')).toHaveText('Invoices');
 
-    //verify that the data is downloaded - and the invoice row is not empty
+    //verify that the data is downloaded - and the invoice row is not empty - DONE
     const row = page.locator('table tbody tr').first();
     await expect(row.locator('td').nth(0)).toHaveText(/\S/); // Invoice Number
     await expect(row.locator('td').nth(1)).toHaveText(/\S/); // Billing Address
     await expect(row.locator('td').nth(2)).toHaveText(/\S/); // Invoice Date
     await expect(row.locator('td').nth(3)).toHaveText(/\S/); // Total
 
-    //12. Get the invoice Details
+    //12. Get the invoice Details - DONE
     await page.getByRole('link', { name: 'Details' }).click();
     await page.waitForLoadState('networkidle');
     await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();

@@ -1,5 +1,5 @@
-import { Locator, Page } from '@playwright/test';
-import { expect } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
+
 //search functionality  is unique for HomePage, we describe it as page Element here separately  for learning purposes only
 export class SearchProducts {
   //made all properties public

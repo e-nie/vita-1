@@ -18,7 +18,7 @@ export class CheckoutPage {
   billingAddressPage: BillingAddressPage;
   paymentPage: PaymentPage;
 
-  constructor(page: Page) {
+  constructor(private page: Page) {
     this.cartIndicator = page.getByRole('link', { name: 'CART 1' });
     this.signInIndicator = page.getByRole('link', { name: 'SIGN IN 2' });
     this.billingAddressIndicator = page.getByRole('link', { name: 'BILLING ADDRESS 3' });
@@ -30,4 +30,9 @@ export class CheckoutPage {
     this.billingAddressPage = new BillingAddressPage(page);
     this.paymentPage = new PaymentPage(page);
   }
+
+// async navigateToCheckout() {
+//     await this.page.goto(this.URL);    
+//   }
+
 }
