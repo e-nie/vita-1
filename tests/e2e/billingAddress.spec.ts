@@ -48,22 +48,9 @@ test.describe('Billing Address', () => {
     const banner = page.locator('img[alt="Banner"]');
     await expect(banner).toBeVisible();
 
-    //3. Add a product to the cart old way
-    await page.locator('img[alt="Combination Pliers"]').click(); //find all products and get first one
+    //3. Add a product to the cart
+    await page.locator('a.card').filter({ hasNotText: 'Out of stock' }).first().click();
 
-    //todo
-    //get all products which are in stock - TEST FAILS, DEBUGGER IS FINE!!!
-    //😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩😩
-    //  const inStockProducts = expect(page.getByRole('listitem').filter({ hasNotText: 'Out of stock' }))
-    //  inStockProducts.toBeVisible();
-
-    // const inStockProducts = page.locator('.card-footer').filter({hasNotText: 'Out of stock'});
-    // const inStockProducts = page.locator('.card-footer:not(:has-text("Out of stock"))').filter();
-    // await inStockProducts.first().waitFor({ state: 'visible' });
-    // await inStockProducts.first().click();
-
-    //go to product page
-    //  expect( page.locator('[data-test="product-name]')).toBeVisible()
     await page.locator('[data-test=add-to-cart]').click();
 
     expect(
