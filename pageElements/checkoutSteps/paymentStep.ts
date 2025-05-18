@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { CardType } from '../../types/types'
 export type PaymentType =
   | 'Bank Transfer'
   | 'Cash on Delivery'
@@ -64,9 +65,7 @@ export class PaymentPage {
     this.orderConfirmation = page.locator('#order-confirmation');
   }
 
-  // Go to payment page
-  async goToPaymentPage() {
-    await this.proceedToCheckoutBtn.click();
+  async verifyPaymentPageLoaded() {
     await expect(this.pageTitle).toBeVisible();
   }
 
@@ -80,16 +79,23 @@ export class PaymentPage {
     await this.accountNumberInput.fill(accountNumber);
   }
 
-  async fillCreditCardForm(
-    cardNumber: string,
-    expirationDate: string,
-    cvv: string,
-    cardHolderName: string,
-  ) {
-    await this.cardNumberInput.fill(cardNumber);
-    await this.expirationDateInput.fill(expirationDate);
-    await this.cvvInput.fill(cvv);
-    await this.cardHolderNameInput.fill(cardHolderName);
+  //‼️КАК ДЕЛАЮТ ПО-ВЗРОСЛОМУ‼️
+  
+  async fillBankTransferFormCopy(fields: {
+    bankName: string;
+    accountName: string;
+    accountNumber: string;
+  }) {
+    await this.bankNameInput.fill(fields.bankName);
+    await this.accountNameInput.fill(fields.accountName);
+    await this.accountNumberInput.fill(fields.accountNumber);
+  }
+
+  async fillCreditCardForm(creditCard: CardType) {
+    await this.cardNumberInput.fill(creditCard.cardNumber);
+    await this.expirationDateInput.fill(creditCard.expirationDate);
+    await this.cvvInput.fill(creditCard.cvv);
+    await this.cardHolderNameInput.fill(creditCard.cardHolderName);
   }
 
   async confirmPayment() {

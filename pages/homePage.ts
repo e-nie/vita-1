@@ -1,6 +1,8 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { SortProducts } from '../pageElements/sortProducts';
 import { SearchProducts } from '../pageElements/searchProducts';
+import { CheckoutPage } from './checkoutPage';
+import { InvoicesPage } from './invoicesPage';
 
 export class HomePage {
   private URL = '/';
@@ -17,6 +19,9 @@ export class HomePage {
 
   sortSelect: SortProducts;
   searchInput: SearchProducts;
+  checkoutPage: CheckoutPage
+  invoicesPage: InvoicesPage
+
 
   constructor( private page: Page) {
     this.page = page;
@@ -29,6 +34,8 @@ export class HomePage {
      */
     this.sortSelect = new SortProducts(page);
     this.searchInput = new SearchProducts(page);
+    this.checkoutPage = new CheckoutPage(page);
+    this.invoicesPage = new InvoicesPage(page);
   }
 
   async openViaUrl() {

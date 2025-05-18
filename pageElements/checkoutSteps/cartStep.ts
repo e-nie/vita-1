@@ -1,7 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export class CartPage {
-  URL = 'checkout';
   productName: Locator;
   productQuantity: Locator;
   productPrice: Locator;
@@ -20,18 +19,16 @@ export class CartPage {
     this.proceedBtn = page.locator('data-test=proceed-1');
   }
 
-  //go to cart
-  async goToCart() {
-    await this.page.goto(this.URL);
-  }
-
   //check if the cart is visible
-  async isCartVisible() {
+  async verifyCartLoaded() {
     await expect(this.page.locator('th:has-text("Item")')).toBeVisible();
     await expect(this.page.locator('th:has-text("Quantity")')).toBeVisible();
     await expect(this.page.locator('th:has-text("Price")')).toBeVisible();
     await expect(this.page.locator('th:has-text("Total")')).toBeVisible();
   }
 
-
+  async proceedToCheckout() {
+    await this.proceedBtn.click();
+    // await expect(this.page.locator('h3:has-text("Sign In")')).toBeVisible();
+  }
 }

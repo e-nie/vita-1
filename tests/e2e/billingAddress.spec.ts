@@ -1,41 +1,21 @@
-import { getRandomString } from '../../helpers/getRandomString';
 import { registerUser } from './../../api/usersApi';
-import { test, expect, Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { validCard } from '../../data/paymentData';
+import { test } from '../../baseTest';
+import { getValidUser } from '../../helpers/dataHelper';
+
 test.describe('Billing Address', () => {
-  test('verify invoice billing address with default address', async ({ request, page }) => {
-    //1. Register a new user via API
-    const randomString = getRandomString(5);
-
-    const payload = {
-      first_name: 'nose1',
-      last_name: 'Doe',
-      address: {
-        street: 'Via La Sky',
-        city: 'Belaggio',
-        state: 'Yo',
-        country: 'IT',
-        postal_code: '1234AA',
-      },
-      phone: '0987654321',
-      dob: '1970-01-01',
-      password: 'SuperSecure@123',
-      email: randomString + '@doe.example',
-    };
-    const response = await registerUser(request, payload);
-    console.log(response);
-
-    console.log(response.status());
-    expect(response.ok()).toBeTruthy(); //status code 200
-
-    const responseBody = await response.json();
-    console.log(responseBody);
-
+  test('verify invoice billing address with default address', async ({
+    request,
+    page,
+    checkoutPage,
+    invoicesPage,
+  }) => {
     //login registered user via UI
     const loginViaUI = async (page: Page) => {
       await page.goto('https://practicesoftwaretesting.com/auth/login');
       await page.locator('[data-test=email]').fill(responseBody.email);
-      await page.locator('[data-test=password]').fill(payload.password);
+      await page.locator('[data-test=password]').fill(user.password);
       await page.locator('[data-test=login-submit]').click();
     };
 
@@ -58,44 +38,64 @@ test.describe('Billing Address', () => {
     ).toBe(' Product added to shopping cart. ');
 
     //4. Go to shopping cart page/checkout - DONE
-    await page.locator('[data-test=cart-quantity]').click();
-    await expect(page.locator('th:has-text("Item")')).toBeVisible();
-    await expect(page.locator('th:has-text("Quantity")')).toBeVisible();
-    await expect(page.locator('th:has-text("Price")')).toBeVisible();
-    await expect(page.locator('th:has-text("Total")')).toBeVisible();
+    await checkoutPage.navigateToCheckout();
+    await checkoutPage.cartPage.verifyCartLoaded();
+    await checkoutPage.cartPage.proceedToCheckout();
+
+    await checkoutPage.signInPage.verifySignInPageLoaded();
+    await checkoutPage.signInPage.proceedToBillingAddress();
+
+    await checkoutPage.billingAddressPage.verifyBillingAddressPageLoaded();
+    await checkoutPage.billingAddressPage.fillBillingAddress({});
+    await checkoutPage.billingAddressPage.proceedToPaymentPage();
+
+    await checkoutPage.paymentPage.verifyPaymentPageLoaded();
+    await checkoutPage.paymentPage.selectPaymentMethod('Credit Card');
+    await checkoutPage.paymentPage.fillCreditCardForm(validCard);
+    await checkoutPage.paymentPage.confirmPayment();
+    await checkoutPage.paymentPage.confirmOrder();
+
+    await invoicesPage.goToInvoicesPage();
+
+    // await page.locator('[data-test=cart-quantity]').click();
+    // await expect(page.locator('th:has-text("Item")')).toBeVisible();
+    // await expect(page.locator('th:has-text("Quantity")')).toBeVisible();
+    // await expect(page.locator('th:has-text("Price")')).toBeVisible();
+    // await expect(page.locator('th:has-text("Total")')).toBeVisible();
 
     //5. Go to sign-in page/checkout - DONE
-    await page.goto('https://practicesoftwaretesting.com/checkout');
-    await page.locator('[data-test=proceed-1]').click();
-    await expect(page.locator('[data-test=proceed-2]')).toBeVisible();
+    // await page.goto('https://practicesoftwaretesting.com/checkout');
+    // await page.locator('[data-test=proceed-1]').click();
+    // await expect(page.locator('[data-test=proceed-2]')).toBeVisible();
 
     //6. Verify billing address - DONE
-    await page.locator('[data-test=proceed-2]').click();
-    await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
+
+    // await page.locator('[data-test=proceed-2]').click();
+    // await expect(page.locator('h3:has-text("Billing Address")')).toBeVisible();
 
     //7. Go to payment page
-    await page.locator('[data-test="proceed-3"]').click();
-    const paymentTitle = page.getByRole('heading', { name: 'Payment' });
-    await expect(paymentTitle).toBeVisible();
+    // await page.locator('[data-test="proceed-3"]').click();
+    // const paymentTitle = page.getByRole('heading', { name: 'Payment' });
+    // await expect(paymentTitle).toBeVisible();
 
     //8. Choose payment method and fill in card details - create data file with card data - DONE
-    await page.locator('[data-test=payment-method]').selectOption('Credit Card');
-    await page.locator('[data-test=credit_card_number]').fill(validCard.cardNumber);
-    await page.locator('[data-test=expiration_date]').fill(validCard.expirationDate);
-    await page.locator('[data-test=cvv]').fill(validCard.cvv);
-    await page.locator('[data-test=card_holder_name]').fill(validCard.cardHolderName);
+    // await page.locator('[data-test=payment-method]').selectOption('Credit Card');
+    // await page.locator('[data-test=credit_card_number]').fill(validCard.cardNumber);
+    // await page.locator('[data-test=expiration_date]').fill(validCard.expirationDate);
+    // await page.locator('[data-test=cvv]').fill(validCard.cvv);
+    // await page.locator('[data-test=card_holder_name]').fill(validCard.cardHolderName);
 
     //9. Click on the "confirm" button and see the success message - DONE
-    await page.getByRole('button', { name: 'Confirm' }).click();
-    const successMessage = page.locator('[data-test=payment-success-message]');
-    await expect(successMessage).toBeVisible(); // ‼️NOT VISIBLE!!
+    // await page.getByRole('button', { name: 'Confirm' }).click();
+    // const successMessage = page.locator('[data-test=payment-success-message]');
+    // await expect(successMessage).toBeVisible(); // ‼️NOT VISIBLE!!
     // const successMessageText = await successMessage.textContent();
 
     //10. Click on the Confirm button second time and go to confirmation page - DONE
-    await expect(page.locator('[data-test=finish]')).toBeVisible();
-    await expect(page.locator('[data-test=finish]')).toBeEnabled();
-    await page.locator('[data-test=finish]').click();
-    await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
+    // await expect(page.locator('[data-test=finish]')).toBeVisible();
+    // await expect(page.locator('[data-test=finish]')).toBeEnabled();
+    // await page.locator('[data-test=finish]').click();
+    // await expect(page.locator('#order-confirmation')).toContainText('Thanks for your order!');
 
     //11. Go to the invoice page - DONE
     await page.goto('https://practicesoftwaretesting.com/account/invoices');

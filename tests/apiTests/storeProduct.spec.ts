@@ -77,41 +77,50 @@ describe('Store Product API Tests', () => {
   });
 
   describe('Store Product API - NEGATIVE', () => {
-    test('verify cannot store product with wrong category id type', async ({ request }) => {
-      //getBrandId
-      const responseBrands = await getAllBrands(request);
-      const responseBrandsBody = await responseBrands.json();
-      const brandId = responseBrandsBody[0].id;
-      //getImageId
-      const responseImages = await getAllImages(request);
-      const responseImagesBody = await responseImages.json();
-      const imageId = responseImagesBody[0].id;
-
-      function generateRandomProductName() {
-        const timestamp = Date.now(); // Get current timestamp
-        return `Product name: ${timestamp}`;
-      }
-
-      const randomProductName = generateRandomProductName();
-      //create new product
-      const payload = {
-        name: randomProductName,
-        description: 'test',
-        price: 1.99,
-        category_id: 'wrongCategoryId',
-        brand_id: brandId,
-        product_image_id: imageId,
-        is_location_offer: true,
-        is_rental: false,
-      };
-
-      //create new product
-      const response = await storeProduct(request, payload);
-      expect(response.status()).toBe(500); 
-      //get response body
-      const responseBody = await response.json();
-      console.log('Response Body:', responseBody);
-      expect(responseBody.message).toEqual('Something went wrong');
+    [
+      { categoryId: 'Alice', errorMessage: 'Something went wrong' },
+      { categoryId: 12345, errorMessage: 'Something went wrong' },
+     
+    ].forEach(({ categoryId, errorMessage }) => {
+      test(`verify cannot store product with wrong category id type with ${categoryId}`, async ({ request }) => {
+        //getBrandId
+        const responseBrands = await getAllBrands(request);
+        const responseBrandsBody = await responseBrands.json();
+        const brandId = responseBrandsBody[0].id;
+        //getImageId
+        const responseImages = await getAllImages(request);
+        const responseImagesBody = await responseImages.json();
+        const imageId = responseImagesBody[0].id;
+  
+        function generateRandomProductName() {
+          const timestamp = Date.now(); // Get current timestamp
+          return `Product name: ${timestamp}`;
+        }
+  
+        const randomProductName = generateRandomProductName();
+        //create new product
+        const payload = {
+          name: randomProductName,
+          description: 'test',
+          price: 1.99,
+          category_id: categoryId,
+          brand_id: brandId,
+          product_image_id: imageId,
+          is_location_offer: true,
+          is_rental: false,
+        };
+  
+        //create new product
+        const response = await storeProduct(request, payload);
+        expect(response.status()).toBe(500); 
+        //get response body
+        const responseBody = await response.json();
+        console.log('Response Body:', responseBody);
+        expect(responseBody.message).toEqual(errorMessage);
+      });
+   
     });
+
+    
   });
 });

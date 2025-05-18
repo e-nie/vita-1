@@ -1,3 +1,4 @@
+import { CheckoutPage } from './pages/checkoutPage';
 import { test as baseTest } from '@playwright/test';
 import { HomePage } from './pages/homePage';
 import { LoginPage } from './pages/loginPage';
@@ -7,6 +8,8 @@ type PomFixtures = {
   homePage: HomePage;
   loginPage: LoginPage;
   productPage: ProductPage;
+  checkoutPage: CheckoutPage;
+  invoicesPage: InvoicesPage;
 };
 
 export const test = baseTest.extend<PomFixtures>({
@@ -22,6 +25,14 @@ export const test = baseTest.extend<PomFixtures>({
     const productPage = new ProductPage(page);
     await use(productPage);
   },
+  checkoutPage: async ({ page }, use) => {
+    const checkoutPage = new CheckoutPage(page);
+    await use(checkoutPage);
+  }
+  invoicesPage: async ({ page }, use) => {
+    const invoicesPage = new InvoicesPage(page);
+    await use(invoicesPage);
+  }
 
 
 });

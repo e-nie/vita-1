@@ -1,7 +1,7 @@
-import { BillingAddressPage } from '../pageElements/checkoutSteps/3-billingAddressStep';
-import { CartPage } from '../pageElements/checkoutSteps/1-cartStep';
-import { PaymentPage } from '../pageElements/checkoutSteps/4-paymentStep';
-import { SignInPage } from '../pageElements/checkoutSteps/2-signInStep';
+import { BillingAddressPage } from '../pageElements/checkoutSteps/billingAddressStep';
+import { CartPage } from '../pageElements/checkoutSteps/cartStep';
+import { PaymentPage } from '../pageElements/checkoutSteps/paymentStep';
+import { SignInPage } from '../pageElements/checkoutSteps/signInStep';
 import { Locator, Page } from '@playwright/test';
 
 export class CheckoutPage {
@@ -14,7 +14,7 @@ export class CheckoutPage {
 
   // Page elements
   cartPage: CartPage;
-  SignInPage: SignInPage;
+  signInPage: SignInPage;
   billingAddressPage: BillingAddressPage;
   paymentPage: PaymentPage;
 
@@ -26,13 +26,21 @@ export class CheckoutPage {
 
     //create instances of the page elements
     this.cartPage = new CartPage(page);
-    this.SignInPage = new SignInPage(page);
+    this.signInPage = new SignInPage(page);
     this.billingAddressPage = new BillingAddressPage(page);
     this.paymentPage = new PaymentPage(page);
   }
 
-// async navigateToCheckout() {
-//     await this.page.goto(this.URL);    
-//   }
+async navigateToCheckout() {
+    await this.page.goto(this.URL);    
+  }
 
 }
+// Vitaly Gryaznov
+// 20:42
+// await checkoutPage.goToCheckoutPage()
+// await checkoutPage.firstStepElement.verifyLoaded()
+// Vitaly Gryaznov
+// 20:44
+// await.checkoutPage.firstStepElement.clcikProceed()
+// await checkoutPage.fsecondStepElement.verifyLoaded()

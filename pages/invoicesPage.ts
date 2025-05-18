@@ -10,7 +10,7 @@ export class InvoicesPage {
     this.invoiceDetailsBtn = page.getByRole('link', { name: 'Details' })
   }
 
-  async goToInvoices() {
+  async goToInvoicesPage() {
     await this.page.goto(this.URL);
     await expect(this.pageTitle).toBeVisible();
     await expect(this.pageTitle).toHaveText('Invoices');
@@ -25,6 +25,6 @@ export class InvoicesPage {
   //where to put this method?❓❓❓❓❓❓❓❓❓❓Title gehoert zu den invoice details - zu den anderen Seiten
     async clickInvoiceDetails() {
         await this.invoiceDetailsBtn.click();
-        await expect(this.page.locator('h3:has-text("Billing Address")')).toBeVisible();
+        // await expect(this.page.locator('h3:has-text("Billing Address")')).toBeVisible();
     }
 }

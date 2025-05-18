@@ -11,8 +11,10 @@ export class SignInPage {
   }
 
   //go to sign-in page (if user is signed in!!!)
-  async goToSignIn() {
-    await this.page.locator('[data-test=proceed-1]').click();
+  async verifySignInPageLoaded() {
     await expect(this.page.locator('[data-test=proceed-2]')).toBeVisible();
+  }
+  async proceedToBillingAddress() {
+    await this.proceedBtn.click();
   }
 }

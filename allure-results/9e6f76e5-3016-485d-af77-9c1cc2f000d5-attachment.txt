@@ -1,0 +1,19 @@
+201
+201
+{
+  first_name: 'nose1',
+  last_name: 'Doe',
+  phone: '0987654321',
+  dob: '1970-01-01',
+  email: 'UouHH@doe.example',
+  id: '01jvhwna56r2p5czx3tqvrcycs',
+  created_at: '2025-05-18 14:27:11',
+  address: {
+    street: 'Street 1',
+    city: 'City',
+    state: 'State',
+    country: 'Country',
+    postal_code: '1234AA'
+  }
+}
+UouHH@doe.example

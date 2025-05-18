@@ -20,18 +20,25 @@ export class BillingAddressPage {
     this.proceedToCheckoutBtn = page.locator('data-test=proceed-3');
   }
 
-  async goToBillingAddress() {
-    await this.page.locator('[data-test=proceed-2]').click();
+  async verifyBillingAddressPageLoaded() {
     await expect(this.page.locator('h3:has-text("Billing Address")')).toBeVisible();
   }
 
-        async fillBillingAddress(street: string, city: string, state: string, country: string, postalCode: string) {
-        await this.streetInput.fill(street);
-        await this.cityInput.fill(city);
-        await this.stateInput.fill(state);
-        await this.countryInput.fill(country);
-        await this.postalCodeInput.fill(postalCode);
-        }
+  async fillBillingAddress(
+    street: string,
+    city: string,
+    state: string,
+    country: string,
+    postalCode: string,
+  ) {
+    await this.streetInput.fill(street);
+    await this.cityInput.fill(city);
+    await this.stateInput.fill(state);
+    await this.countryInput.fill(country);
+    await this.postalCodeInput.fill(postalCode);
+  }
+
+  async proceedToPaymentPage() {
+    await this.proceedToCheckoutBtn.click();
+  }
 }
-//После заполнения формы кликать не надо на сабмит, верно?
-//кнопки перехода на сл страницу мы прямо в тесте добавляем?Не пойму куда их засунуть
