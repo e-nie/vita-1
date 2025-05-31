@@ -38,7 +38,7 @@ export class HomePage {
     this.invoicesPage = new InvoicesPage(page);
   }
 
-  async openViaUrl() {
+  async openPageViaUrl() {
     await this.page.goto(this.URL);
   }
 

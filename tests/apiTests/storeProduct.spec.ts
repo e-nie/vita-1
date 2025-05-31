@@ -76,9 +76,12 @@ describe('Store Product API Tests', () => {
     });
   });
 
+
+  //‼️-------PARAMETRISATION!!!!-----------------
+
   describe('Store Product API - NEGATIVE', () => {
     [
-      { categoryId: 'Alice', errorMessage: 'Something went wrong' },
+      { categoryId: 'WrongCategoryId', errorMessage: 'Something went wrong' },
       { categoryId: 12345, errorMessage: 'Something went wrong' },
      
     ].forEach(({ categoryId, errorMessage }) => {
@@ -117,10 +120,7 @@ describe('Store Product API Tests', () => {
         const responseBody = await response.json();
         console.log('Response Body:', responseBody);
         expect(responseBody.message).toEqual(errorMessage);
-      });
-   
-    });
-
-    
+      });   
+    });    
   });
 });

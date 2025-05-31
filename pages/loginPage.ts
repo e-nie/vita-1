@@ -39,5 +39,5 @@ export class LoginPage {
     await this.inputEmail.fill(fields.email);
     await this.inputPassword.fill(fields.password);
     await this.loginBtn.click();
-  }
+  }  
 }

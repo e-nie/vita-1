@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 
-export class MyAccountPage {
+export class AccountPage {
   URL: string = '/account/';
 
   pageTitle: Locator;
@@ -19,13 +19,13 @@ export class MyAccountPage {
   }
 
   // Method to verify that the page is loaded
-  async goToMyAccountPage() {
+  async goToAccountPage() {
     await this.page.goto(this.URL);
     await this.pageTitle.waitFor({ state: 'visible' });
   }
-  //❓но мы должны проверить, что у нас сработал сабмит при лошине корректно или нет? 
+  //❓но мы должны проверить, что у нас сработал сабмит при лоgине корректно или нет? 
   //на всякий случай метод ниже. 
-  async verifyMyAccountPageLoaded() {
+  async verifyAccountPageLoaded() {
     await this.pageTitle.waitFor({ state: 'visible' });
     await this.navFavorites.waitFor({ state: 'visible' });
     await this.navProfile.waitFor({ state: 'visible' });
