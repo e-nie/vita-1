@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { registerUser } from '../../api/usersApi';
 import { getRandomString } from '../../helpers/getRandomString';
+import { User } from '../../types/types';
 
 test('verify user registered successfully', async ({ request }) => {
   const randomString = getRandomString(5);

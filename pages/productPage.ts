@@ -16,6 +16,7 @@ URL: string = '/product/';
 
     addToCartBtn: Locator
     addToFavouritesBtn: Locator
+    productAddedToast: Locator
 
     constructor(page: Page) {
         this.productImg = page.locator('img[class="figure-img img-fluid"]');
@@ -31,6 +32,19 @@ URL: string = '/product/';
 
         this.addToCartBtn = page.locator('[data-test=add-to-cart]');
         this.addToFavouritesBtn = page.locator('[data-test=add-to-favorites]');
+        this.productAddedToast = page.getByRole('alert', { name: 'Product added to shopping cart.' });
 
+    }
+    async verifyProductPageLoaded() {
+        await this.productImg.waitFor();
+        await this.productTitle.waitFor();
+        await this.categoryLabel.waitFor();
+        await this.brandLabel.waitFor();
+        await this.productPrice.waitFor();
+        await this.productDescription.waitFor();
+    }
+    async addToCart() {
+        await this.addToCartBtn.click();
+        await this.productAddedToast.waitFor({ state: 'visible' });
     }
 }

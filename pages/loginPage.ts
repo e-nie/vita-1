@@ -19,7 +19,7 @@ export class LoginPage {
     this.inputEmail = page.locator('[data-test=email]');
     this.inputPassword = page.locator('[data-test=password]');
     this.loginBtn = page.locator('[data-test=login-submit]');
-    this.registerLink = page.locator('[data-test="register-link]');
+    this.registerLink = page.locator('[data-test=register-link]');
     this.forgotPasswordLink = page.locator('[data-test=forgot-password-link]');
   }
   async goToLoginPage() {

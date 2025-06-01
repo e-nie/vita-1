@@ -10,6 +10,7 @@ export class HomePage {
 
   productName: Locator;
   banner: Locator;
+  firstProduct: Locator;
 
   /**
    * sortSelect: SortProducts: Declares a field that will hold an instance of the SortProducts class, allowing access to sorting methods.
@@ -26,6 +27,7 @@ export class HomePage {
   constructor( private page: Page) {
     this.page = page;
     this.productName = page.locator('[data-test=product-name]');
+    this.firstProduct =  page.locator('a.card')
     // this.banner = page.locator('img[alt=Banner]');//css option
     this.banner = page.getByRole('img', { name: 'Banner' });//in-built Playwright option (user-visible locator)
 
@@ -59,5 +61,8 @@ export class HomePage {
   async getProductPrices() {
     const productPrices = await this.page.locator('[data-test=product-price]').allTextContents();
     return productPrices.map((price) => price.trim());
+  }
+  async getFirstProduct() {
+    await this.firstProduct.filter({ hasNotText: 'Out of stock' }).first().click();
   }
 }

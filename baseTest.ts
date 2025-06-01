@@ -5,6 +5,7 @@ import { LoginPage } from './pages/loginPage';
 import { ProductPage } from './pages/productPage';
 import { InvoicesPage } from './pages/invoicesPage';
 import { AccountPage } from './pages/accountPage';
+import { InvoiceDetailsPage } from './pages/invoiceDetailsPage';
 
 type PomFixtures = {
   homePage: HomePage;
@@ -13,6 +14,7 @@ type PomFixtures = {
   productPage: ProductPage;
   checkoutPage: CheckoutPage;
   invoicesPage: InvoicesPage;
+  invoiceDetailsPage:InvoiceDetailsPage
 };
 
 export const test = baseTest.extend<PomFixtures>({
@@ -39,6 +41,10 @@ export const test = baseTest.extend<PomFixtures>({
   invoicesPage: async ({ page }, use) => {
     const invoicesPage = new InvoicesPage(page);
     await use(invoicesPage);
+  },
+  invoiceDetailsPage: async ({ page }, use) => {
+    const invoiceDetailsPage = new InvoiceDetailsPage(page);
+    await use(invoiceDetailsPage);
   },
 });
 
