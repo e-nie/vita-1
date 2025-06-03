@@ -68,7 +68,7 @@ export function getValidUser(): User {
     },
     phone: generateRandomPhone(),
     dob: `${randomYear}-${randomMonth}-${randomDay}`,
-    password: 'Test!123',
+    password: 'SuperSecure@123',
     email: `${getRandomString(10)}@example.com`,
   };
 
