@@ -2,8 +2,11 @@ import { getRandomString } from '../../helpers/getRandomString';
 import { registerUser } from './../../api/usersApi';
 import { test, expect, Page } from '@playwright/test';
 import { validCard } from '../../data/paymentData';
-test.describe('Billing Address', () => {
+import * as allure from 'allure-js-commons';
+
+test.describe('Billing Address', async () => {
   test('verify invoice billing address with default address', async ({ request, page }) => {
+    await allure.tags('Long test', 'Billing');
     //1. Register a new user via API
     const randomString = getRandomString(5);
 
@@ -58,11 +61,13 @@ test.describe('Billing Address', () => {
     ).toBe(' Product added to shopping cart. ');
 
     //4. Go to shopping cart page/checkout - DONE
-    await page.locator('[data-test=cart-quantity]').click();
-    await expect(page.locator('th:has-text("Item")')).toBeVisible();
-    await expect(page.locator('th:has-text("Quantity")')).toBeVisible();
-    await expect(page.locator('th:has-text("Price")')).toBeVisible();
-    await expect(page.locator('th:has-text("Total")')).toBeVisible();
+    await test.step('Go to shopping cart page', async () => {
+      await page.locator('[data-test=cart-quantity]').click();
+      await expect(page.locator('th:has-text("Item")')).toBeVisible();
+      await expect(page.locator('th:has-text("QuantityDEBUG")')).toBeVisible();
+      await expect(page.locator('th:has-text("Price")')).toBeVisible();
+      await expect(page.locator('th:has-text("Total")')).toBeVisible();
+    });
 
     //5. Go to sign-in page/checkout - DONE
     await page.goto('https://practicesoftwaretesting.com/checkout');
