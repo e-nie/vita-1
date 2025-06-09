@@ -23,15 +23,46 @@ export type CardType ={
   cardHolderName: string;
 }
 
-type ID = string | number;
 
 export type ProductPayload = {
   name: string;
   description: string;
   price: number;
-  category_id: ID;
-  brand_id: ID;
-  product_image_id: ID;
+  category_id: string;
+  brand_id: string;
+  product_image_id: string;
   is_location_offer: boolean;
   is_rental: boolean;
 };
+
+export type ProductResponseData = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  is_location_offer: number;  // Note: API returns numbers instead of booleans
+  is_rental: number;          // Note: API returns numbers instead of booleans
+  in_stock: number;           // Note: API returns numbers instead of booleans
+  brand: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+  category: {
+    id: string;
+    parent_id: string;
+    name: string;
+    slug: string;
+    sub_categories: string[];
+  };
+  product_image: {
+    by_name: string;
+    by_url: string;
+    source_name: string;
+    source_url: string;
+    file_name: string;
+    title: string;
+    id: string;
+  };
+};
+

@@ -103,7 +103,7 @@ describe('Store Product API Tests', () => {
   
         const randomProductName = generateRandomProductName();
         //create new product
-        const payload = {
+        const payload:any = {
           name: randomProductName,
           description: 'test',
           price: 1.99,
@@ -115,7 +115,7 @@ describe('Store Product API Tests', () => {
         };
   
         //create new product
-        const response = await storeProduct(request, payload);
+        const response:any = await storeProduct(request, payload);
         expect(response.status()).toBe(500); 
         //get response body
         const responseBody = await response.json();
