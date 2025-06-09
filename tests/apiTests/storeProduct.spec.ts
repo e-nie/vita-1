@@ -1,9 +1,10 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
 import { storeProduct } from '../../api/productsApi';
 import { getAllCategories } from '../../api/categoriesApi';
 import { getAllBrands } from '../../api/brandsApi';
 import { getAllImages } from '../../api/imagesApi';
 import { describe } from 'node:test';
+import { ProductPayload } from '../../types/types';
 
 describe('Store Product API Tests', () => {
   describe('Store Product API - POSITIVE', () => {
@@ -31,7 +32,7 @@ describe('Store Product API Tests', () => {
 
       const randomProductName = generateRandomProductName();
       //create new product
-      const payload = {
+      const payload: ProductPayload = {
         name: randomProductName,
         description: 'test',
         price: 1.99,

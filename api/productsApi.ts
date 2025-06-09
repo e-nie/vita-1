@@ -1,20 +1,16 @@
-import { APIRequestContext, APIResponse } from "@playwright/test";
-import { ProductPayload } from "../types/types";
+import { APIRequestContext, APIResponse } from '@playwright/test';
+import { ProductPayload } from '../types/types';
 
-interface ProductResponse extends APIResponse {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  category: {
-    id: number;
-    name: string;
-  };
+interface ProductResponse extends APIResponse{
+  json(): Promise<{
+ id: number|string;
+  name?: string;
+  description?: string;
+  price?: number;
+}>;
 }
 
-
-
-export const storeProduct = async (request:APIRequestContext, payload: ProductPayload) => {
+export const storeProduct = async (request: APIRequestContext, payload: ProductPayload) => {
   return request.post('https://api.practicesoftwaretesting.com/products', {
     data: payload,
     headers: {
@@ -24,7 +20,11 @@ export const storeProduct = async (request:APIRequestContext, payload: ProductPa
   });
 };
 
-export const getProductById = async (request: APIRequestContext, id:number) => {
+export const getProductById = async (
+  request: APIRequestContext,
+  id: number | string
+ 
+): Promise<ProductResponse> => {
   return request.get(`https://api.practicesoftwaretesting.com/products/${id}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -32,5 +32,3 @@ export const getProductById = async (request: APIRequestContext, id:number) => {
     },
   });
 };
-
- 
