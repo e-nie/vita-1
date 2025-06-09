@@ -22,3 +22,16 @@ export type CardType ={
   cvv: string;
   cardHolderName: string;
 }
+
+type ID = string | number;
+
+export type ProductPayload = {
+  name: string;
+  description: string;
+  price: number;
+  category_id: ID;
+  brand_id: ID;
+  product_image_id: ID;
+  is_location_offer: boolean;
+  is_rental: boolean;
+};
