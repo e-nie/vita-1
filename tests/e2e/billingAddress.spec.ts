@@ -2,6 +2,7 @@ import { validCard } from '../../data/paymentData';
 import { test } from '../../baseTest';
 import { getValidUser } from '../../helpers/dataHelper';
 import { registerUserStep } from '../../steps/userSteps';
+import { loginStep } from '../../steps/loginSteps';
 
 test.describe('Billing Address', () => {
   test('verify invoice billing address with default address', async ({
@@ -15,23 +16,28 @@ test.describe('Billing Address', () => {
     invoiceDetailsPage,
     productPage,
   }) => {
-    const user = getValidUser();
-    const registeredUser = await registerUserStep(request, user);
+    //тут мы создаем пользователя - просто собираем объкт с валидными данными и используем его как payload
+    const user = getValidUser();// create a valid user object with default address - use everywhere in the test
+    const registeredUser = await registerUserStep(request, user);//🔴 ⁇ why we need to register the user again? We already have a valid user object
 
     // Debug logging
-console.log('User data:', user);
-console.log('Registered user data:', registeredUser);
-console.log('Email to use:', registeredUser.email);
-console.log('Password to use:', user.password);
+// console.log('User data:', user);
+// console.log('Registered user data:', registeredUser);
+// console.log('Email to use:', registeredUser.email);
+// console.log('Password to use:', user.password);
 
     //Login user
-    await loginPage.goToLoginPage();
-    await loginPage.verifyLoginPageLoaded();
-    await loginPage.enterLoginDataAndSubmit({
-      email: registeredUser.email,
-      password: user.password,
-    });
-    await accountPage.verifyAccountPageLoaded();
+    // await loginPage.goToLoginPage();
+    // await loginPage.verifyLoginPageLoaded();
+    // await loginPage.enterLoginDataAndSubmit({
+    //   email: user.email,
+    //   password: user.password,
+    // });
+    // await accountPage.verifyAccountPageLoaded();
+
+    
+    //1. Login user using loginSteps
+    await loginStep(page, loginPage, accountPage, user);
 
     //2. Go to home page
     await homePage.openPageViaUrl();
@@ -71,6 +77,6 @@ console.log('Password to use:', user.password);
     await invoiceDetailsPage.verifyInvoiceDetailsPageLoaded();
 
     // Verify each component of the address
-    await invoiceDetailsPage.verifyBillingAddressDetails(registeredUser.address);
+    await invoiceDetailsPage.verifyBillingAddressDetails(user);
   });
 });

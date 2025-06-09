@@ -12,6 +12,7 @@ export function getValidUser(): User {
     return `${getRandomNumber(100, 999)}${getRandomNumber(100, 999)}${getRandomNumber(1000, 9999)}`;
   };
 
+  //looks strange, no sense to use name lists here - FIX
   // List of sample first names and last names for randomization
   const firstNames = [
     'John',
@@ -38,7 +39,7 @@ export function getValidUser(): User {
     'Wilson',
   ];
 
-  // List of sample cities and states
+  // List of sample cities and states - OK
   const cities = [
     'New York',
     'Los Angeles',
@@ -57,6 +58,7 @@ export function getValidUser(): User {
   const randomMonth = getRandomNumber(1, 12).toString().padStart(2, '0');
   const randomDay = getRandomNumber(1, 28).toString().padStart(2, '0');
   const payload = {
+    //fix names insert just a string
     firstName: firstNames[getRandomNumber(0, firstNames.length - 1)],
     lastName: lastNames[getRandomNumber(0, lastNames.length - 1)],
     address: {
