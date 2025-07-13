@@ -14,10 +14,3 @@ export const getAllBrands = async (request:APIRequestContext):Promise<BrandAPIRe
     });
     }
 
-    [
-  {
-    "id": "string",
-    "name": "new brand",
-    "slug": "new-brand"
-  }
-]
