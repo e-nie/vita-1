@@ -1,5 +1,21 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
-import { ProductPayload, ProductResponseData } from '../types/types';
+import { ProductPayload } from '../types/types';
+import { Brand, Category, ProductImage } from './requestTypes';
+
+
+
+export type ProductResponseData = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  is_location_offer: number;  // Note: API returns numbers instead of booleans
+  is_rental: number;          // Note: API returns numbers instead of booleans
+  in_stock: number;           // Note: API returns numbers instead of booleans
+  brand: Brand
+  category: Category;
+  product_image:ProductImage
+};
 
 interface ProductAPIResponse extends APIResponse{
   json(): Promise<ProductResponseData>;
