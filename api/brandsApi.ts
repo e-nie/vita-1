@@ -1,6 +1,11 @@
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, APIResponse } from "@playwright/test";
+import { BrandResponse } from "./requestTypes";
 
-export const getAllBrands = async (request:APIRequestContext) => {
+
+interface BrandAPIResponse extends APIResponse  {
+json(): Promise<BrandResponse[]>;
+}
+export const getAllBrands = async (request:APIRequestContext):Promise<BrandAPIResponse> => {
     return request.get('https://api.practicesoftwaretesting.com/brands', {
         headers: {
         'Content-Type': 'application/json',
@@ -8,3 +13,11 @@ export const getAllBrands = async (request:APIRequestContext) => {
         },
     });
     }
+
+    [
+  {
+    "id": "string",
+    "name": "new brand",
+    "slug": "new-brand"
+  }
+]

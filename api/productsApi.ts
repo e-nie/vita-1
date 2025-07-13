@@ -15,6 +15,7 @@ export type ProductResponseData = {
   brand: BrandResponse
   category: CategoryResponse;
   product_image:ProductImageResponse
+  message?: string; // Optional message field for error responses
 };
 
 interface ProductAPIResponse extends APIResponse{

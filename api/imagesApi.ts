@@ -1,6 +1,14 @@
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, APIResponse } from "@playwright/test";
+import { ProductImageResponse } from "./requestTypes";
 
-export const getAllImages = async (request: APIRequestContext) => {
+
+
+
+interface ImageAPIResponse extends APIResponse {
+    json(): Promise<ProductImageResponse[]>;
+}
+
+export const getAllImages = async (request: APIRequestContext):Promise<ImageAPIResponse> => {
     return request.get('https://api.practicesoftwaretesting.com/images', {
         headers: {
         'Content-Type': 'application/json',
@@ -8,3 +16,5 @@ export const getAllImages = async (request: APIRequestContext) => {
         },
     });
     }
+
+     

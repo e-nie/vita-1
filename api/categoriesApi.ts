@@ -1,6 +1,13 @@
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, APIResponse } from "@playwright/test";
+import { CategoryResponse } from "./requestTypes";
 
-export const getAllCategories = async (request:APIRequestContext) => {
+
+
+interface CategoryAPIResponse extends APIResponse {
+    json(): Promise<CategoryResponse[]>;
+}
+
+export const getAllCategories = async (request:APIRequestContext):Promise<CategoryAPIResponse> => {
     return request.get('https://api.practicesoftwaretesting.com/categories', {
         headers: {
         'Content-Type': 'application/json',
@@ -8,3 +15,5 @@ export const getAllCategories = async (request:APIRequestContext) => {
         },
     });
     }
+
+
