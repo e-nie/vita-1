@@ -53,27 +53,14 @@ describe('Store Product API Tests', () => {
 
       // Create validation data from the response body
       const validationData = {
-        name: responseBody.name,
-        description: responseBody.description,
-        price: responseBody.price,
-        is_location_offer: responseBody.is_location_offer,
-        is_rental: responseBody.is_rental,
+       ...responseBody,
         category_id: responseBody.category.id,
         brand_id: responseBody.brand.id,
         product_image_id: responseBody.product_image.id,
       };
 
       // Check that all fields from payload exist in the response (with appropriate nesting)
-      expect(validationData).toMatchObject(payload);
-      // Check that the response contains the expected fields
-      expect(validationData.name).toBe(payload.name);
-      expect(validationData.description).toBe(payload.description);
-      expect(validationData.price).toBe(payload.price);
-      expect(validationData.category_id).toBe(payload.category_id);
-      expect(validationData.brand_id).toBe(payload.brand_id);
-      expect(validationData.product_image_id).toBe(payload.product_image_id);
-      expect(validationData.is_location_offer).toBe(payload.is_location_offer);
-      expect(validationData.is_rental).toBe(payload.is_rental);
+      expect(validationData).toMatchObject(payload);      
     });
   });
 

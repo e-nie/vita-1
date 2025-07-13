@@ -1,16 +1,16 @@
-export type Brand = {
+export type BrandResponse = {
   id: string;
   name: string;
   slug: string;
 }
-export type Category = {
+export type CategoryResponse = {
   id: string;
   parent_id: string;
   name: string;
   slug: string;
   sub_categories: string[];
 }
-export type ProductImage = {
+export type ProductImageResponse = {
   id: string;
   by_name: string;
   by_url: string;

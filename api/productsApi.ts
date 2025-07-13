@@ -1,6 +1,6 @@
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { ProductPayload } from '../types/types';
-import { Brand, Category, ProductImage } from './requestTypes';
+import { BrandResponse, CategoryResponse, ProductImageResponse } from './requestTypes';
 
 
 
@@ -12,9 +12,9 @@ export type ProductResponseData = {
   is_location_offer: number;  // Note: API returns numbers instead of booleans
   is_rental: number;          // Note: API returns numbers instead of booleans
   in_stock: number;           // Note: API returns numbers instead of booleans
-  brand: Brand
-  category: Category;
-  product_image:ProductImage
+  brand: BrandResponse
+  category: CategoryResponse;
+  product_image:ProductImageResponse
 };
 
 interface ProductAPIResponse extends APIResponse{
